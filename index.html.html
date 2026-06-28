@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sintropia">
+<title>Sintropia Humana</title>
+<style>
+  :root {
+    --verde: #2D6B5E;
+    --verde-light: #3D8C7A;
+    --verde-ultra-light: #E8F4F1;
+    --dourado: #B8860B;
+    --dourado-light: #F5EDD6;
+    --text: #1A2E2A;
+    --text-secondary: #5A7A73;
+    --border: #D8E8E4;
+    --bg: #F7FAFA;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(45,107,94,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--verde);
+    letter-spacing: -0.2px;
+  }
+
+  .date-badge {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--verde-ultra-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 100;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    gap: 3px;
+    transition: color 0.15s;
+    color: var(--text-secondary);
+  }
+
+  .nav-item.active { color: var(--verde); }
+
+  .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  .nav-label { font-size: 10px; font-weight: 500; }
+
+  .screen { display: none; padding: 1rem 1rem 0; }
+  .screen.active { display: block; }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 1.25rem 0 0.75rem;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow);
+  }
+
+  .field { margin-bottom: 1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .label-hint {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  input[type="number"],
+  input[type="time"],
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--white);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--verde-light);
+  }
+
+  textarea { resize: none; min-height: 72px; line-height: 1.5; }
+
+  .scale-container { margin-top: 4px; }
+
+  .scale-track {
+    position: relative;
+    padding: 0 2px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--verde) 0%, var(--verde) var(--val, 0%), var(--border) var(--val, 0%), var(--border) 100%);
+    outline: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--verde);
+    border: 2px solid var(--white);
+    box-shadow: 0 1px 4px rgba(45,107,94,0.3);
+    cursor: pointer;
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+
+  .scale-labels span {
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+
+  .scale-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--verde);
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 500;
+    float: right;
+    margin-top: -2px;
+  }
+
+  .scale-meaning {
+    font-size: 12px;
+    color: var(--verde);
+    font-weight: 500;
+    margin-top: 10px;
+    text-align: center;
+    background: var(--verde-ultra-light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    display: block;
+    min-height: 28px;
+    line-height: 1.4;
+  }
+
+  .scale-track {
+    position: relative;
+    padding: 0 2px;
+  }
+
+  .scale-legend {
+    margin-top: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: none;
+  }
+
+  .scale-legend.open { display: block; }
+
+  .scale-legend-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 7px 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .scale-legend-toggle svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    transition: transform 0.2s;
+  }
+
+  .scale-legend-toggle.open svg { transform: rotate(180deg); }
+
+  .scale-legend-list {
+    border-top: 1px solid var(--border);
+  }
+
+  .scale-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+
+  .scale-legend-row:last-child { border-bottom: none; }
+
+  .scale-legend-row.current {
+    background: var(--verde-ultra-light);
+  }
+
+  .scale-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .scale-legend-row.current .scale-num {
+    background: var(--verde);
+    color: var(--white);
+  }
+
+  .scale-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .scale-legend-row.current .scale-desc {
+    color: var(--verde);
+    font-weight: 500;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+
+  .toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 24px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: var(--white);
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .toggle input:checked + .toggle-slider { background: var(--verde); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .chip {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    background: var(--white);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip.selected {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--white);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--verde);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.15s;
+    letter-spacing: -0.2px;
+  }
+
+  .submit-btn:active { background: var(--verde-light); }
+
+  .progress-bar {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    margin: 0.5rem 0 1rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  .step-indicator {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-bottom: 0.25rem;
+  }
+
+  .home-greeting {
+    padding: 1.5rem 0 0.5rem;
+    text-align: center;
+  }
+
+  .home-greeting h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--verde);
+    margin-bottom: 4px;
+  }
+
+  .home-greeting p {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .quick-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+
+  .quick-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    text-align: center;
+  }
+
+  .quick-card:active { border-color: var(--verde); }
+
+  .quick-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+  }
+
+  .quick-card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  .quick-card-label { font-size: 12px; font-weight: 500; color: var(--text); }
+  .quick-card-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  .icon-diario { background: var(--verde-ultra-light); color: var(--verde); }
+  .icon-vis { background: #FEF8E7; color: var(--dourado); }
+  .icon-ativ { background: #EEF2FF; color: #4F46E5; }
+  .icon-idioma { background: #FEF2F2; color: #DC2626; }
+  .icon-consult { background: #F0FDF4; color: #16A34A; }
+
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.95);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .success-overlay.show { display: flex; }
+
+  .success-circle {
+    width: 72px;
+    height: 72px;
+    background: var(--verde);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-circle svg { width: 36px; height: 36px; stroke: white; fill: none; stroke-width: 2.5; }
+
+  .success-text { font-size: 18px; font-weight: 500; color: var(--verde); }
+  .success-sub { font-size: 13px; color: var(--text-secondary); }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1rem 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="18" fill="#E8F4F1"/>
+      <path d="M20 8 C14 8, 9 13, 9 19 C9 22, 10.5 24.5, 13 26 C15.5 27.5, 18 27, 20 25 C22 23, 22.5 20, 21 18 C19.5 16, 17 16, 16 18 C15 20, 16 22, 18 22" stroke="#2D6B5E" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M20 32 C26 32, 31 27, 31 21 C31 18, 29.5 15.5, 27 14 C24.5 12.5, 22 13, 20 15 C18 17, 17.5 20, 19 22 C20.5 24, 23 24, 24 22 C25 20, 24 18, 22 18" stroke="#B8860B" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span class="logo-text">Sintropia Humana</span>
+  </div>
+  <span class="date-badge" id="headerDate"></span>
+</header>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="home-greeting">
+    <h1>Bom dia, Márcio</h1>
+    <p>Registre seu dia com presença e intenção</p>
+  </div>
+
+  <p class="section-title">Registro de hoje</p>
+
+  <div class="quick-cards">
+    <div class="quick-card" onclick="goTo('diario')">
+      <div class="quick-card-icon icon-diario">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      </div>
+      <div class="quick-card-label">Registro diário</div>
+      <div class="quick-card-sub">Sono, energia, humor</div>
+    </div>
+
+    <div class="quick-card" onclick="goTo('visualizacao')">
+      <div class="quick-card-icon icon-vis">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      </div>
+      <div class="quick-card-label">Visualização</div>
+      <div class="quick-card-sub">Propósito matinal</div>
+    </div>
+
+    <div class="quick-card" onclick="goTo('atividade')">
+      <div class="quick-card-icon icon-ativ">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div class="quick-card-label">Atividade física</div>
+      <div class="quick-card-sub">Treino e saúde</div>
+    </div>
+
+    <div class="quick-card" onclick="goTo('idiomas')">
+      <div class="quick-card-icon icon-idioma">
+        <svg viewBox="0 0 24 24"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>
+      </div>
+      <div class="quick-card-label">Idiomas</div>
+      <div class="quick-card-sub">Inglês · Francês</div>
+    </div>
+  </div>
+
+  <div class="quick-card" style="margin-top:10px" onclick="goTo('consultoria')">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="quick-card-icon icon-consult" style="margin:0;flex-shrink:0">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+      </div>
+      <div style="text-align:left">
+        <div class="quick-card-label">Projetos de consultoria</div>
+        <div class="quick-card-sub">Du-To Creative Studio · PRJ-001 · Discovery</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTRO DIÁRIO -->
+<div class="screen" id="screen-diario">
+  <p class="section-title">Registro diário</p>
+
+  <div class="card">
+    <div class="field">
+      <label>Horas de sono <span class="label-hint">noite anterior</span></label>
+      <input type="number" min="0" max="24" step="0.5" placeholder="7.5" id="horas_sono">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Horário que acordou</label>
+      <input type="time" id="horario_acordou">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Energia <span class="scale-value" id="val-energia">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'energia')" id="energia">
+        <div class="scale-labels"><span>Exausto</span><span>Estado de fluxo</span></div>
+        <span class="scale-meaning" id="meaning-energia">5 — Energia neutra</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Humor <span class="scale-value" id="val-humor">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'humor')" id="humor">
+        <div class="scale-labels"><span>Sofrimento</span><span>Plenitude</span></div>
+        <span class="scale-meaning" id="meaning-humor">5 — Neutro</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Clareza mental <span class="scale-value" id="val-clareza_mental">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'clareza_mental')" id="clareza_mental">
+        <div class="scale-labels"><span>Nebulosa</span><span>Cristalina</span></div>
+        <span class="scale-meaning" id="meaning-clareza_mental">5 — Funcional mas não fluido</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Ansiedade <span class="scale-value" id="val-ansiedade">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'ansiedade')" id="ansiedade">
+        <div class="scale-labels"><span>Em paz</span><span>Crise</span></div>
+        <span class="scale-meaning" id="meaning-ansiedade">5 — Começa a afetar o dia</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Propósito <span class="scale-value" id="val-proposito">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'proposito')" id="proposito">
+        <div class="scale-labels"><span>Vazio</span><span>Realização plena</span></div>
+        <span class="scale-meaning" id="meaning-proposito">5 — Propósito neutro</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Presença com a família <span class="scale-value" id="val-presenca_familia">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'presenca_familia')" id="presenca_familia">
+        <div class="scale-labels"><span>Ausente</span><span>Totalmente presente</span></div>
+        <span class="scale-meaning" id="meaning-presenca_familia">5 — Atenção dividida</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Satisfação no trabalho <span class="scale-value" id="val-satisfacao_trabalho">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'satisfacao_trabalho')" id="satisfacao_trabalho">
+        <div class="scale-labels"><span>Desgosto</span><span>Dia excepcional</span></div>
+        <span class="scale-meaning" id="meaning-satisfacao_trabalho">5 — Neutro</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Praticou exercício hoje?</label>
+      <label class="toggle"><input type="checkbox" id="exercicio"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm('diario')">Salvar registro diário</button>
+</div>
+
+<!-- VISUALIZAÇÃO DO PROPÓSITO -->
+<div class="screen" id="screen-visualizacao">
+  <p class="section-title">Visualização do propósito</p>
+
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Realizou a prática hoje?</label>
+      <label class="toggle"><input type="checkbox" id="pratica_realizada" onchange="toggleVis(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+
+  <div id="vis-campos" style="display:none">
+    <div class="card">
+      <div class="field">
+        <label>Horário da prática</label>
+        <input type="time" id="horario_vis">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Duração real <span class="label-hint">minutos</span></label>
+        <input type="number" min="1" max="60" placeholder="20" id="duracao_vis">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Etapas concluídas <span class="label-hint">de 6</span></label>
+        <div class="chips" id="etapas-chips">
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',1)">1</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',2)">2</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',3)">3</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',4)">4</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',5)">5</span>
+          <span class="chip selected" onclick="selectChip(this,'etapas_concluidas',6)">6 — completo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>Conexão com o propósito <span class="scale-value" id="val-conexao_proposito">7</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'conexao_proposito')" id="conexao_proposito">
+          <div class="scale-labels"><span>Mecânica</span><span>Certeza absoluta</span></div>
+        <span class="scale-meaning" id="meaning-conexao_proposito">5 — Sem profundidade</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Nível de gratidão <span class="scale-value" id="val-nivel_gratidao">7</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'nivel_gratidao')" id="nivel_gratidao">
+          <div class="scale-labels"><span>Vazia</span><span>Plenitude e amor</span></div>
+        <span class="scale-meaning" id="meaning-nivel_gratidao">5 — Presente mas não tocou</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Clareza das visões <span class="scale-value" id="val-clareza_visao">7</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'clareza_visao')" id="clareza_visao">
+          <div class="scale-labels"><span>Mente vazia</span><span>Cinematográfica</span></div>
+        <span class="scale-meaning" id="meaning-clareza_visao">5 — Alguns detalhes</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Energia após a prática <span class="scale-value" id="val-energia_pos_pratica">7</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'energia_pos_pratica')" id="energia_pos_pratica">
+          <div class="scale-labels"><span>Mais cansado</span><span>Estado de fluxo</span></div>
+        <span class="scale-meaning" id="meaning-energia_pos_pratica">5 — Neutro</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>Emoção dominante</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'emocao',0,'paz')">Paz</span>
+          <span class="chip" onclick="selectChip(this,'emocao',0,'gratidao')">Gratidão</span>
+          <span class="chip" onclick="selectChip(this,'emocao',0,'alegria')">Alegria</span>
+          <span class="chip" onclick="selectChip(this,'emocao',0,'foco')">Foco</span>
+          <span class="chip" onclick="selectChip(this,'emocao',0,'amor')">Amor</span>
+          <span class="chip" onclick="selectChip(this,'emocao',0,'forca')">Força</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Afirmação que mais ressoou</label>
+        <textarea placeholder="Qual afirmação tocou mais fundo hoje?" id="afirmacao_mais_forte"></textarea>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Visão mais vívida</label>
+        <textarea placeholder="Qual cena do futuro ficou mais nítida?" id="visao_mais_viva"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm('visualizacao')">Salvar visualização</button>
+</div>
+
+<!-- ATIVIDADE FÍSICA -->
+<div class="screen" id="screen-atividade">
+  <p class="section-title">Atividade física</p>
+
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Praticou atividade hoje?</label>
+      <label class="toggle"><input type="checkbox" id="atividade_realizada" onchange="toggleAtiv(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+
+  <div id="ativ-campos" style="display:none">
+    <div class="card">
+      <div class="field">
+        <label>Tipo de atividade</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'musculacao')">Musculação</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'corrida')">Corrida</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'crossfit')">Crossfit</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'treino_funcional')">Funcional</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'caminhada')">Caminhada</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'yoga')">Yoga</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'alongamento')">Alongamento</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'escalada')">Escalada</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'natacao')">Natação</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'ciclismo')">Ciclismo</span>
+          <span class="chip" onclick="selectChip(this,'tipo_atividade',0,'artes_marciais')">Artes marciais</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Horário do treino</label>
+        <input type="time" id="horario_treino">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Duração <span class="label-hint">minutos</span></label>
+        <input type="number" min="1" placeholder="60" id="duracao_treino">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>Nível de esforço <span class="scale-value" id="val-nivel_esforco">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_esforco')" id="nivel_esforco">
+          <div class="scale-labels"><span>Repouso</span><span>Limite máximo</span></div>
+        <span class="scale-meaning" id="meaning-nivel_esforco">5 — Esforço moderado</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Satisfação com o treino <span class="scale-value" id="val-satisfacao_treino">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'satisfacao_treino')" id="satisfacao_treino">
+          <div class="scale-labels"><span>Arrependido</span><span>Superou tudo</span></div>
+        <span class="scale-meaning" id="meaning-satisfacao_treino">5 — Neutro</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Disposição antes do treino <span class="scale-value" id="val-disposicao_pre">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'disposicao_pre')" id="disposicao_pre">
+          <div class="scale-labels"><span>Sem vontade</span><span>Pronto para tudo</span></div>
+        <span class="scale-meaning" id="meaning-disposicao_pre">5 — Disposição neutra</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Disposição após o treino <span class="scale-value" id="val-disposicao_pos">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'disposicao_pos')" id="disposicao_pos">
+          <div class="scale-labels"><span>Exausto</span><span>Energizado</span></div>
+        <span class="scale-meaning" id="meaning-disposicao_pos">5 — Neutro — igual antes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>Peso <span class="label-hint">kg (opcional)</span></label>
+        <input type="number" min="30" max="250" step="0.1" placeholder="78.5" id="peso_kg">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Pressão arterial <span class="label-hint">opcional</span></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="number" min="60" max="250" placeholder="120" id="pressao_sistolica" style="flex:1">
+          <span style="color:var(--text-secondary);font-size:18px;font-weight:300">/</span>
+          <input type="number" min="40" max="150" placeholder="80" id="pressao_diastolica" style="flex:1">
+        </div>
+        <p style="font-size:11px;color:var(--text-secondary);margin-top:4px">sistólica / diastólica</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm('atividade')">Salvar atividade física</button>
+</div>
+
+<!-- IDIOMAS -->
+<div class="screen" id="screen-idiomas">
+  <p class="section-title">Idiomas</p>
+
+  <div class="card">
+    <div class="field">
+      <label>Idioma praticado</label>
+      <div class="chips">
+        <span class="chip selected" onclick="selectChip(this,'idioma',0,'ingles')">Inglês</span>
+        <span class="chip" onclick="selectChip(this,'idioma',0,'frances')">Francês</span>
+        <span class="chip" onclick="selectChip(this,'idioma',0,'espanhol')">Espanhol</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Pilar</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'pilar',0,'listening')">Listening</span>
+        <span class="chip" onclick="selectChip(this,'pilar',0,'speaking')">Speaking</span>
+        <span class="chip" onclick="selectChip(this,'pilar',0,'writing')">Writing</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Fase atual</label>
+      <div class="chips">
+        <span class="chip selected" onclick="selectChip(this,'fase',0,'basico')">Básico</span>
+        <span class="chip" onclick="selectChip(this,'fase',0,'intermediario')">Intermediário</span>
+        <span class="chip" onclick="selectChip(this,'fase',0,'avancado')">Avançado</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Atividade praticada</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'shadowing')">Shadowing</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'podcast')">Podcast</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'serie')">Série</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'diario')">Diário</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'redacao')">Redação</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'conversacao')">Conversação</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'leitura')">Leitura</span>
+        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'musica')">Música</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Horário da prática</label>
+      <input type="time" id="horario_idioma">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Minutos de prática</label>
+      <input type="number" min="1" placeholder="30" id="minutos_pratica">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Palavras novas <span class="label-hint">opcional</span></label>
+      <input type="number" min="0" placeholder="5" id="vocabulario_novo">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Evolução percebida <span class="scale-value" id="val-nivel_percebido">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_percebido')" id="nivel_percebido">
+        <div class="scale-labels"><span>Improdutivo</span><span>Salto de nível</span></div>
+        <span class="scale-meaning" id="meaning-nivel_percebido">5 — Evolução moderada</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Principal dificuldade <span class="label-hint">opcional</span></label>
+      <textarea placeholder="O que travou hoje na prática?" id="dificuldade_idioma"></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm('idiomas')">Salvar prática de idiomas</button>
+</div>
+
+<!-- CONSULTORIA -->
+<div class="screen" id="screen-consultoria">
+  <p class="section-title">Projetos de consultoria</p>
+
+  <div class="card">
+    <div class="field">
+      <label>Projeto</label>
+      <select id="nome_projeto" onchange="onSelectProjeto(this.value)" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:var(--white);appearance:none;-webkit-appearance:none;outline:none">
+        <option value="">Selecione um projeto...</option>
+      </select>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSePMXSYOLxE5nZ91duCXo-9UCn5sWVS7lSeVdztBbJj_Zco7A/viewform" target="_blank" style="display:block;margin-top:8px;font-size:12px;color:var(--verde);text-decoration:none;text-align:center;padding:7px;border:1px dashed var(--verde);border-radius:var(--radius-sm);background:var(--verde-ultra-light)">
+        Cadastrar novo projeto no formulário →
+      </a>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Tipo de projeto</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'tipo_projeto',0,'dados')">Dados</span>
+        <span class="chip" onclick="selectChip(this,'tipo_projeto',0,'ia')">IA</span>
+        <span class="chip" onclick="selectChip(this,'tipo_projeto',0,'estrategia')">Estratégia</span>
+        <span class="chip" onclick="selectChip(this,'tipo_projeto',0,'produto')">Produto</span>
+        <span class="chip" onclick="selectChip(this,'tipo_projeto',0,'misto')">Misto</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Modelo comercial</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'modelo_comercial',0,'pro_bono')">Pró bono</span>
+        <span class="chip" onclick="selectChip(this,'modelo_comercial',0,'remunerado')">Remunerado</span>
+        <span class="chip" onclick="selectChip(this,'modelo_comercial',0,'equity')">Equity</span>
+        <span class="chip" onclick="selectChip(this,'modelo_comercial',0,'indefinido')">Indefinido</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Status do contrato</label>
+      <div class="chips">
+        <span class="chip selected" onclick="selectChip(this,'contrato_status',0,'em_negociacao')">Em negociação</span>
+        <span class="chip" onclick="selectChip(this,'contrato_status',0,'ativo')">Ativo</span>
+        <span class="chip" onclick="selectChip(this,'contrato_status',0,'encerrado')">Encerrado</span>
+        <span class="chip" onclick="selectChip(this,'contrato_status',0,'nao_fechado')">Não fechado</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Fase atual</label>
+      <div class="chips">
+        <span class="chip selected" onclick="selectChip(this,'fase_atual',0,'discovery')">Discovery</span>
+        <span class="chip" onclick="selectChip(this,'fase_atual',0,'proposta')">Proposta</span>
+        <span class="chip" onclick="selectChip(this,'fase_atual',0,'execucao')">Execução</span>
+        <span class="chip" onclick="selectChip(this,'fase_atual',0,'entrega')">Entrega</span>
+        <span class="chip" onclick="selectChip(this,'fase_atual',0,'pos_projeto')">Pós-projeto</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Sprint atual</label>
+      <input type="number" min="1" placeholder="1" id="sprint_atual">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Horas neste sprint</label>
+      <input type="number" min="0" step="0.5" placeholder="4" id="horas_sprint">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Horário de execução</label>
+      <input type="time" id="horario_consult">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Competências desenvolvidas</label>
+      <div class="chips" id="competencias-chips">
+        <span class="chip" onclick="toggleMultiChip(this)">Arquitetura de dados</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Engenharia de dados</span>
+        <span class="chip" onclick="toggleMultiChip(this)">SQL / BigQuery</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Python</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Apps Script</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Google Cloud</span>
+        <span class="chip" onclick="toggleMultiChip(this)">IA generativa</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Estratégia de negócio</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Gestão de produto</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Proposta comercial</span>
+        <span class="chip" onclick="toggleMultiChip(this)">Consultoria cliente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Energia dedicada ao projeto <span class="scale-value" id="val-nivel_energia_consult">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'nivel_energia_consult')" id="nivel_energia_consult">
+        <div class="scale-labels"><span>Travado</span><span>Estado de fluxo</span></div>
+        <span class="scale-meaning" id="meaning-nivel_energia_consult">5 — Energia neutra</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Satisfação com o andamento <span class="scale-value" id="val-satisfacao_consult">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'satisfacao_consult')" id="satisfacao_consult">
+        <div class="scale-labels"><span>Em risco</span><span>Melhor cenário</span></div>
+        <span class="scale-meaning" id="meaning-satisfacao_consult">5 — Neutro</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>Principal aprendizado do sprint</label>
+      <textarea placeholder="O que você aprendeu que não sabia antes?" id="aprendizado_sprint"></textarea>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Bloqueio ou dificuldade</label>
+      <textarea placeholder="Deixe em branco se não houver" id="bloqueio"></textarea>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Próximo passo</label>
+      <textarea placeholder="Uma ação concreta com responsável claro" id="proximo_passo"></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm('consultoria')">Salvar registro de consultoria</button>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-circle">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <p class="success-text" id="success-text">Registro salvo!</p>
+  <p class="success-sub" id="success-id"></p>
+  <button class="submit-btn" style="width:200px;margin-top:8px" onclick="closeSuccess()">Voltar ao início</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-item active" onclick="goTo('home')" id="nav-home">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span class="nav-label">Início</span>
+  </button>
+  <button class="nav-item" onclick="goTo('diario')" id="nav-diario">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+    <span class="nav-label">Diário</span>
+  </button>
+  <button class="nav-item" onclick="goTo('atividade')" id="nav-atividade">
+    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span class="nav-label">Saúde</span>
+  </button>
+  <button class="nav-item" onclick="goTo('idiomas')" id="nav-idiomas">
+    <svg viewBox="0 0 24 24"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>
+    <span class="nav-label">Idiomas</span>
+  </button>
+  <button class="nav-item" onclick="goTo('consultoria')" id="nav-consultoria">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+    <span class="nav-label">Projetos</span>
+  </button>
+</nav>
+
+<script>
+  const chipData = {};
+
+  function setDate() {
+    const now = new Date();
+    const opts = { weekday: 'short', day: 'numeric', month: 'short' };
+    document.getElementById('headerDate').textContent = now.toLocaleDateString('pt-BR', opts);
+  }
+
+  function updateGreeting() {
+    const h = new Date().getHours();
+    const g = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+    document.querySelector('.home-greeting h1').textContent = g + ', Márcio';
+  }
+
+  function goTo(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('screen-' + screen).classList.add('active');
+    const navEl = document.getElementById('nav-' + screen);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  const SCALE_MEANINGS = {
+    energia: ['Completamente exausto — travado','Energia mínima — difícil iniciar','Energia muito baixa','Energia abaixo do normal','Funcionando no mínimo','Energia neutra','Energia boa — produtivo','Energia alta — foco claro','Energia muito alta','Disposição e foco totais','Estado de fluxo — máxima energia'],
+    humor: ['Sofrimento intenso','Tristeza profunda','Tristeza significativa','Abatido, desanimado','Levemente desanimado','Neutro — nem bem nem mal','Bem-humorado, leve','Feliz e animado','Muito feliz','Alegria intensa','Pleno, radiante, em paz profunda'],
+    clareza_mental: ['Confusão total — mente nebulosa','Muito difícil de pensar','Pensamento muito lento','Foco instável','Clareza parcial','Funcional mas não fluido','Mente clara — decisões fluem','Alta clareza mental','Raciocínio rápido e preciso','Quase em estado de fluxo','Ideias cristalinas — foco absoluto'],
+    ansiedade: ['Completamente em paz','Levíssima tensão','Tensão quase imperceptível','Ansiedade leve — controlável','Ansiedade moderada','Começa a afetar o dia','Ansiedade alta — dificulta foco','Ansiedade muito alta','Pensamentos acelerados','Ansiedade severa','Crise — paralisia total'],
+    proposito: ['Vazio total — sem sentido','Quase nenhum propósito','Propósito muito distante','Propósito fraco e apagado','Propósito presente mas tênue','Propósito neutro','Sensação clara de propósito','Muito alinhado ao propósito','No caminho certo — certeza','Propósito profundo e intenso','Plena realização — sentido absoluto'],
+    presenca_familia: ['Completamente ausente','Presença mínima','Fisicamente presente, distante','Presente mas muito distraído','Presença parcial e alternada','Atenção dividida','Bem presente — conexão real','Muito presente — qualidade','Momentos de conexão profunda','Presença quase total','Conexão total — completamente presente'],
+    satisfacao_trabalho: ['Desgosto total','Muito insatisfeito','Insatisfeito','Abaixo do esperado','Tolerando — sem entusiasmo','Neutro — dia ok','Satisfeito com o dia','Dia produtivo e significativo','Muito satisfeito','Dia excelente','Dia excepcional — realizado'],
+    nivel_esforco: ['Repouso total — sem atividade','Movimento mínimo','Caminhada tranquila','Esforço baixo — aquecimento','Esforço leve e sustentável','Esforço moderado','Esforço alto — respiração acelerada','Esforço muito alto','Próximo do limite','Quase limite máximo','Esforço máximo absoluto'],
+    satisfacao_treino: ['Arrependido de ter treinado','Muito insatisfeito','Treino frustrante','Abaixo do esperado','Treino regular — pouco satisfeito','Neutro — treino ok','Satisfeito — bom treino','Treino excelente','Muito satisfeito — superou','Treino excepcional','Melhor treino — superou tudo'],
+    disposicao_pre: ['Sem nenhuma vontade','Quase sem vontade','Muito pouca disposição','Disposição baixa','Disposição abaixo do normal','Disposição neutra','Boa disposição','Alta disposição','Muito disposto','Ótima disposição','Pronto para tudo — máxima disposição'],
+    disposicao_pos: ['Exausto — pior do que antes','Muito cansado','Cansado','Levemente cansado','Abaixo do normal','Neutro — igual antes','Levemente energizado','Bem energizado','Muito energizado','Ótima energia pós-treino','Transcendente — estado de fluxo'],
+    conexao_proposito: ['Prática mecânica — sem conexão','Conexão mínima','Muito pouca conexão','Conexão leve e superficial','Conexão moderada','Presente mas sem profundidade','Boa conexão — propósito claro','Conexão profunda','Emocionalmente presente','Conexão muito profunda','Certeza absoluta do propósito'],
+    nivel_gratidao: ['Prática vazia — sem gratidão','Gratidão mínima','Gratidão muito baixa','Gratidão leve — sem emoção','Gratidão moderada','Presente mas não tocou','Gratidão genuína','Coração aquecido','Gratidão profunda e real','Emoção intensa de gratidão','Gratidão plena — lágrimas e amor'],
+    clareza_visao: ['Mente vazia — sem imagens','Fragmentos muito vagos','Imagens muito vagas','Imagens turvas e imprecisas','Visão parcial — poucos detalhes','Alguns detalhes aparecem','Visão clara — cenas definidas','Visão nítida e detalhada','Quase real — muito vívida','Extremamente nítida','Cinematográfica — vívida e emocional'],
+    energia_pos_pratica: ['Mais cansado do que antes','Muito cansado após prática','Sem diferença percebida','Leve melhora de energia','Energia um pouco melhor','Neutro — ok para começar o dia','Levemente energizado','Bem energizado e focado','Muito energizado','Energia excelente','Transcendente — estado de fluxo total'],
+    nivel_percebido: ['Sessão improdutiva','Evolução mínima','Evolução muito baixa','Evolução leve — pouco ficou','Algum progresso percebido','Evolução moderada','Boa evolução — progresso claro','Sessão muito produtiva','Evolução alta — algo clicou','Evolução muito alta','Excepcional — salto de nível'],
+    nivel_energia_consult: ['Completamente travado no projeto','Energia mínima','Energia muito baixa','Abaixo do normal','Energia insuficiente','Energia neutra','Energia boa para o projeto','Alta energia e foco','Muito engajado e focado','Energia excepcional','Estado de fluxo total no projeto'],
+    satisfacao_consult: ['Projeto em colapso — risco máximo','Muito insatisfeito','Insatisfeito com o andamento','Abaixo do esperado','Avançando com dificuldade','Neutro — sem entusiasmo','Satisfeito com o progresso','Projeto fluindo bem','Muito satisfeito','Andamento excelente','Melhor cenário possível — realizado']
+  };
+
+  function buildLegend(key) {
+    const list = document.getElementById('legend-list-' + key);
+    if (!list || !SCALE_MEANINGS[key]) return;
+    if (list.children.length > 0) return;
+    SCALE_MEANINGS[key].forEach((text, i) => {
+      const row = document.createElement('div');
+      row.className = 'scale-legend-row';
+      row.id = 'legend-row-' + key + '-' + i;
+      row.innerHTML = '<div class="scale-num">' + i + '</div><div class="scale-desc">' + text + '</div>';
+      list.appendChild(row);
+    });
+  }
+
+  function toggleLegend(key, btn) {
+    buildLegend(key);
+    const panel = document.getElementById('legend-' + key);
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    btn.classList.toggle('open');
+    btn.querySelector('span') && (btn.querySelector('span').textContent = isOpen ? 'ver todos os significados' : 'ocultar significados');
+    const spans = btn.querySelectorAll('text, span');
+    const textNodes = [...btn.childNodes].filter(n => n.nodeType === 3);
+    if (textNodes.length) textNodes[textNodes.length-1].textContent = isOpen ? ' ver todos os significados' : ' ocultar significados';
+    highlightLegendRow(key, parseInt(document.getElementById(key)?.value || document.querySelector('[id="' + key + '"]')?.value || 5));
+  }
+
+  function highlightLegendRow(key, val) {
+    document.querySelectorAll('[id^="legend-row-' + key + '-"]').forEach(r => r.classList.remove('current'));
+    const current = document.getElementById('legend-row-' + key + '-' + val);
+    if (current) {
+      current.classList.add('current');
+      current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  function updateScale(input, key) {
+    const val = parseInt(input.value);
+    const display = document.getElementById('val-' + key);
+    if (display) display.textContent = val;
+    const pct = (val / 10) * 100;
+    input.style.setProperty('--val', pct + '%');
+    const meaningEl = document.getElementById('meaning-' + key);
+    if (meaningEl && SCALE_MEANINGS[key]) {
+      meaningEl.textContent = val + ' — ' + SCALE_MEANINGS[key][val];
+    }
+    highlightLegendRow(key, val);
+  }
+
+  document.querySelectorAll('input[type="range"]').forEach(r => {
+    const pct = (r.value / 10) * 100;
+    r.style.setProperty('--val', pct + '%');
+  });
+
+  function selectChip(el, key, multi, value) {
+    if (!multi) {
+      const parent = el.parentElement;
+      parent.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      chipData[key] = value;
+    }
+  }
+
+  function toggleMultiChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  function toggleVis(cb) {
+    document.getElementById('vis-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+
+  function toggleAtiv(cb) {
+    document.getElementById('ativ-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+
+  function getCompetencias() {
+    const chips = document.querySelectorAll('#competencias-chips .chip.selected');
+    return Array.from(chips).map(c => c.textContent.trim()).join(', ');
+  }
+
+  function generateId(prefix) {
+    const stored = localStorage.getItem('sintropia_counter_' + prefix) || '0';
+    const next = parseInt(stored) + 1;
+    localStorage.setItem('sintropia_counter_' + prefix, next);
+    return prefix + '-' + String(next).padStart(3, '0');
+  }
+
+  function submitForm(type) {
+    const now = new Date();
+    const timeStr = now.toTimeString().slice(0,5);
+    const dateStr = now.toISOString().slice(0,10);
+
+    let id, label;
+
+    if (type === 'diario') {
+      id = generateId('DIA');
+      label = 'Registro diário';
+    } else if (type === 'visualizacao') {
+      id = generateId('VIS');
+      label = 'Visualização do propósito';
+    } else if (type === 'atividade') {
+      id = generateId('ATF');
+      label = 'Atividade física';
+    } else if (type === 'idiomas') {
+      id = generateId('IDI');
+      label = 'Prática de idiomas';
+    } else if (type === 'consultoria') {
+      id = generateId('REG');
+      label = 'Registro de consultoria';
+      const nomeProjSel = document.getElementById('nome_projeto').value;
+      if (nomeProjSel) updateProjetoAposSubmit(nomeProjSel);
+    }
+
+    document.getElementById('success-text').textContent = label + ' salvo!';
+    document.getElementById('success-id').textContent = id + ' · ' + dateStr + ' · ' + timeStr;
+    document.getElementById('success-overlay').classList.add('show');
+  }
+
+  function closeSuccess() {
+    document.getElementById('success-overlay').classList.remove('show');
+    goTo('home');
+  }
+
+  // ── GESTÃO DE PROJETOS ──────────────────────────────────────────────────────
+
+  const PROJETOS_KEY = 'sintropia_projetos';
+
+  function getProjetos() {
+    try {
+      return JSON.parse(localStorage.getItem(PROJETOS_KEY) || '[]');
+    } catch(e) { return []; }
+  }
+
+  function saveProjetos(lista) {
+    localStorage.setItem(PROJETOS_KEY, JSON.stringify(lista));
+  }
+
+  function carregarSelectProjetos() {
+    const select = document.getElementById('nome_projeto');
+    if (!select) return;
+    const projetos = getProjetos();
+    const current = select.value;
+    select.innerHTML = '<option value="">Selecione um projeto...</option>';
+    projetos.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.nome;
+      opt.textContent = p.nome + (p.id ? ' · ' + p.id : '');
+      opt.dataset.tipo = p.tipo || '';
+      opt.dataset.modelo = p.modelo || '';
+      opt.dataset.fase = p.fase || '';
+      opt.dataset.contrato = p.contrato || '';
+      select.appendChild(opt);
+    });
+    if (current) select.value = current;
+  }
+
+  function onSelectProjeto(nome) {
+    if (!nome) return;
+    const select = document.getElementById('nome_projeto');
+    const opt = [...select.options].find(o => o.value === nome);
+    if (!opt) return;
+    preencherChip('tipo_projeto', opt.dataset.tipo);
+    preencherChip('modelo_comercial', opt.dataset.modelo);
+    preencherChip('fase_atual', opt.dataset.fase);
+    preencherChip('contrato_status', opt.dataset.contrato);
+  }
+
+  function preencherChip(grupo, valor) {
+    if (!valor) return;
+    document.querySelectorAll('[onclick*="' + grupo + '"]').forEach(chip => {
+      chip.classList.remove('selected');
+      if (chip.getAttribute('onclick').includes("'" + valor + "'")) {
+        chip.classList.add('selected');
+        chipData[grupo] = valor;
+      }
+    });
+  }
+
+
+
+
+  function updateProjetoAposSubmit(nome) {
+    const projetos = getProjetos();
+    const idx = projetos.findIndex(p => p.nome === nome);
+    if (idx === -1) return;
+    projetos[idx].tipo = chipData['tipo_projeto'] || projetos[idx].tipo;
+    projetos[idx].modelo = chipData['modelo_comercial'] || projetos[idx].modelo;
+    projetos[idx].fase = chipData['fase_atual'] || projetos[idx].fase;
+    projetos[idx].contrato = chipData['contrato_status'] || projetos[idx].contrato;
+    saveProjetos(projetos);
+  }
+
+  // Pré-cadastrar Du-To
+  (function() {
+    const projetos = getProjetos();
+    if (!projetos.find(p => p.nome === 'Du-To Creative Studio')) {
+      projetos.push({ nome: 'Du-To Creative Studio', id: 'PRJ-001', tipo: 'misto', modelo: 'pro_bono', fase: 'discovery', contrato: 'em_negociacao' });
+      saveProjetos(projetos);
+    }
+  })();
+
+  setDate();
+  updateGreeting();
+  carregarSelectProjetos();
+</script>
+</body>
+</html>
