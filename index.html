@@ -1934,6 +1934,7 @@
 
 <script>
   const chipData = {};
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzkfW5eGHm0ZWCjzC7GkN_5ww3zHsLQsWrgT6XcJ4CN8fx2tbQw1kiukFdO6mvbK9A9pw/exec';
 
   function setDate() {
     const now = new Date();
@@ -2081,59 +2082,173 @@
     return prefix + '-' + String(next).padStart(3, '0');
   }
 
-  function submitForm(type) {
+  const TABELAS = {
+    'diario':        'registro_diario',
+    'visualizacao':  'visualizacao_proposito',
+    'atividade':     'registro_atividade_fisica',
+    'idiomas':       'registro_idiomas',
+    'consultoria':   'projetos_consultoria',
+    'tabagismo':     'registro_tabagismo',
+    'alimentacao':   'registro_alimentacao',
+    'hidratacao':    'registro_hidratacao',
+    'saude':         'registro_saude',
+    'musica':        'registro_musica',
+    'relacionamento':'registro_relacionamento',
+    'financeiro':    'registro_financeiro',
+    'proposito':     'registro_proposito',
+  };
+
+  const LABELS = {
+    'diario':        'Registro diário',
+    'visualizacao':  'Visualização do propósito',
+    'atividade':     'Atividade física',
+    'idiomas':       'Prática de idiomas',
+    'consultoria':   'Registro de consultoria',
+    'tabagismo':     'Registro de tabagismo',
+    'alimentacao':   'Registro de alimentação',
+    'hidratacao':    'Registro de hidratação',
+    'saude':         'Registro de saúde',
+    'musica':        'Registro de música',
+    'relacionamento':'Relacionamentos',
+    'financeiro':    'Registro financeiro',
+    'proposito':     'Propósito declarado',
+  };
+
+  function coletarDados(type) {
+    const now = new Date();
+    const dados = {
+      data_registro: now.toISOString().slice(0,10),
+      horario_execucao: document.getElementById('horario_execucao') ?
+        document.getElementById('horario_execucao').value || null : null,
+    };
+
+    const campos = {
+      'diario': ['horas_sono','energia','humor','clareza_mental','ansiedade',
+        'proposito','presenca_familia','satisfacao_trabalho',
+        'atividade_fisica','nivel_esforco','satisfacao_treino',
+        'fumou_hoje','cigarros_hoje','qualidade_alimentacao',
+        'copos_agua','consumiu_alcool','ouviu_musica','impacto_musica',
+        'houve_conflito','qualidade_conexoes'],
+      'visualizacao': ['horario_vis','duracao_vis','conexao_proposito',
+        'nivel_gratidao','clareza_visao','energia_pos_pratica',
+        'afirmacao_mais_forte','visao_mais_viva'],
+      'atividade': ['horario_treino','duracao_treino','nivel_esforco',
+        'satisfacao_treino','disposicao_pre','disposicao_pos',
+        'peso_kg','pressao_sistolica','pressao_diastolica'],
+      'idiomas': ['horario_idioma','minutos_pratica','vocabulario_novo',
+        'nivel_percebido','dificuldade_idioma'],
+      'consultoria': ['nome_projeto','sprint_atual','horas_sprint',
+        'horario_consult','aprendizado_sprint','bloqueio','proximo_passo',
+        'nivel_energia_consult','satisfacao_consult'],
+      'tabagismo': ['quantidade_cigarros','horario_primeiro',
+        'nivel_vontade','nivel_resistencia'],
+      'alimentacao': ['qualidade_alimentacao'],
+      'hidratacao': ['copos_agua','xicaras_cafe','ml_refrigerante','doses_alcool',
+        'nivel_hidratacao'],
+      'saude': ['intensidade_sintoma','dias_atestado','qual_medicamento',
+        'bem_estar_geral'],
+      'musica': ['minutos_ouvindo','impacto_emocional_mus','musica_marcante'],
+      'relacionamento': ['qualidade_conexoes_rel','engajamento_social',
+        'interacao_significativa','gratidao_alguem'],
+      'financeiro': ['entrada_fin','saida_fin','descricao_suprafluo',
+        'satisfacao_financeira','ansiedade_financeira'],
+      'proposito': ['descricao_proposito','data_alcance','indicadores_alcance',
+        'alinhamento_declarado','obs_proposito'],
+    };
+
+    // Coleta campos de texto/número
+    (campos[type] || []).forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const v = el.type === 'number' ? (el.value ? parseFloat(el.value) : null)
+               : el.type === 'checkbox' ? el.checked
+               : el.value || null;
+      // Mapeia nomes de campo do HTML para nomes da tabela
+      const mapa = {
+        'horario_vis': 'horario_execucao',
+        'duracao_vis': 'duracao_minutos',
+        'horario_treino': 'horario_execucao',
+        'duracao_treino': 'duracao_minutos',
+        'horario_idioma': 'horario_execucao',
+        'dificuldade_idioma': 'dificuldade',
+        'horario_consult': 'horario_execucao',
+        'nivel_energia_consult': 'nivel_energia',
+        'satisfacao_consult': 'satisfacao',
+        'impacto_emocional_mus': 'impacto_emocional',
+        'musica_marcante': 'musica_ou_artista_marcante',
+        'qualidade_conexoes_rel': 'qualidade_conexoes',
+        'interacao_significativa': 'interacao_mais_significativa',
+        'gratidao_alguem': 'gratidao_por_alguem',
+        'entrada_fin': 'entrada',
+        'saida_fin': 'saida',
+        'desc_proposito': 'descricao_proposito',
+        'obs_proposito': 'observacoes',
+      };
+      const chave = mapa[id] || id;
+      dados[chave] = v;
+    });
+
+    // Coleta chips (single select)
+    Object.keys(chipData).forEach(k => {
+      if (chipData[k] !== undefined) dados[k] = chipData[k];
+    });
+
+    // Coleta checkboxes booleanos especiais
+    const bools = ['fumou_hoje','atividade_fisica','exercicio','pratica_realizada',
+      'atividade_realizada','cafe_da_manha','almoco','lanche','jantar',
+      'comeu_besteira','comeu_fruta','comeu_verdura','consumiu_alcool',
+      'consumiu_refrigerante','consumiu_cafe','consumiu_suco','ouviu_musica',
+      'houve_conflito','foi_medico','sofreu_acidente','tomou_medicamento',
+      'medico_receitou','tem_atestado','gastou_suprafluo','assumiu_responsabilidade'];
+    bools.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) dados[id] = el.checked;
+    });
+
+    return dados;
+  }
+
+  async function submitForm(type) {
     const now = new Date();
     const timeStr = now.toTimeString().slice(0,5);
     const dateStr = now.toISOString().slice(0,10);
+    const label = LABELS[type] || type;
+    const tabela = TABELAS[type];
 
-    let id, label;
+    // Coleta dados do formulário
+    const dados = coletarDados(type);
 
-    if (type === 'diario') {
-      id = generateId('DIA');
-      label = 'Registro diário';
-    } else if (type === 'visualizacao') {
-      id = generateId('VIS');
-      label = 'Visualização do propósito';
-    } else if (type === 'atividade') {
-      id = generateId('ATF');
-      label = 'Atividade física';
-    } else if (type === 'idiomas') {
-      id = generateId('IDI');
-      label = 'Prática de idiomas';
-    } else if (type === 'consultoria') {
-      id = generateId('REG');
-      label = 'Registro de consultoria';
-      const nomeProjSel = document.getElementById('nome_projeto').value;
-      if (nomeProjSel) updateProjetoAposSubmit(nomeProjSel);
-    } else if (type === 'tabagismo') {
-      id = generateId('TAB');
-      label = 'Registro de tabagismo';
-    } else if (type === 'alimentacao') {
-      id = generateId('ALI');
-      label = 'Registro de alimentação';
-    } else if (type === 'hidratacao') {
-      id = generateId('HID');
-      label = 'Registro de hidratação';
-    } else if (type === 'saude') {
-      id = generateId('SAU');
-      label = 'Registro de saúde';
-    } else if (type === 'musica') {
-      id = generateId('MUS');
-      label = 'Registro de música';
-    } else if (type === 'relacionamento') {
-      id = generateId('REL');
-      label = 'Registro de relacionamentos';
-    } else if (type === 'financeiro') {
-      id = generateId('FIN');
-      label = 'Registro financeiro';
-    } else if (type === 'proposito') {
-      id = generateId('PRP');
-      label = 'Propósito declarado';
-    }
-
-    document.getElementById('success-text').textContent = label + ' salvo!';
-    document.getElementById('success-id').textContent = id + ' · ' + dateStr + ' · ' + timeStr;
+    // Mostra overlay de loading
+    document.getElementById('success-text').textContent = 'Salvando...';
+    document.getElementById('success-id').textContent = 'Enviando para o BigQuery';
     document.getElementById('success-overlay').classList.add('show');
+
+    try {
+      const response = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify({ tabela, dados }),
+        headers: { 'Content-Type': 'text/plain' }
+      });
+
+      const result = await response.json();
+
+      if (result.status === 200) {
+        const id = result.dados ? result.dados.id : '—';
+        document.getElementById('success-text').textContent = label + ' salvo!';
+        document.getElementById('success-id').textContent = id + ' · ' + dateStr + ' · ' + timeStr;
+
+        if (type === 'consultoria') {
+          const nomeProjSel = document.getElementById('nome_projeto').value;
+          if (nomeProjSel) updateProjetoAposSubmit(nomeProjSel);
+        }
+      } else {
+        document.getElementById('success-text').textContent = 'Erro ao salvar';
+        document.getElementById('success-id').textContent = result.mensagem || 'Tente novamente';
+      }
+    } catch(err) {
+      document.getElementById('success-text').textContent = 'Erro de conexão';
+      document.getElementById('success-id').textContent = 'Verifique sua internet e tente novamente';
+    }
   }
 
   function closeSuccess() {
