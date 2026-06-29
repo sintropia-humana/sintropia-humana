@@ -490,6 +490,91 @@
   .icon-ativ { background: #EEF2FF; color: #4F46E5; }
   .icon-idioma { background: #FEF2F2; color: #DC2626; }
   .icon-consult { background: #F0FDF4; color: #16A34A; }
+  .icon-tab { background: #FFF7ED; color: #EA580C; }
+  .icon-ali { background: #F0FDF4; color: #15803D; }
+  .icon-fin { background: #ECFDF5; color: #059669; }
+  .icon-sau { background: #FFF1F2; color: #BE123C; }
+  .icon-hid { background: #EFF6FF; color: #1D4ED8; }
+  .icon-mus { background: #FAF5FF; color: #7C3AED; }
+  .icon-rel { background: #FFF0F6; color: #DB2777; }
+  .icon-prop { background: #FFFBEB; color: #D97706; }
+
+  .mais-menu {
+    display: none;
+    position: fixed;
+    bottom: 65px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 1rem;
+    z-index: 99;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    border-radius: 16px 16px 0 0;
+  }
+  .mais-menu.open { display: block; }
+  .mais-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .mais-menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 4px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: none;
+  }
+  .mais-menu-item:active { background: var(--verde-ultra-light); }
+  .mais-menu-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mais-menu-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+  .mais-menu-label { font-size: 10px; font-weight: 500; color: var(--text); text-align: center; }
+  .mais-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 98;
+  }
+  .mais-overlay.open { display: block; }
+  .prop-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--dourado), #D97706);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .prop-btn svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2; }
+  .ish-card {
+    background: linear-gradient(135deg, var(--verde), #1A4A3F);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    color: white;
+  }
+  .ish-number { font-size: 48px; font-weight: 300; line-height: 1; }
+  .ish-label { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+  .ish-state { font-size: 14px; font-weight: 500; margin-top: 8px; }
 
   .success-overlay {
     display: none;
@@ -543,9 +628,28 @@
 
 <!-- HOME -->
 <div class="screen active" id="screen-home">
-  <div class="home-greeting">
-    <h1>Bom dia, Márcio</h1>
-    <p>Registre seu dia com presença e intenção</p>
+  <div class="ish-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:11px;opacity:0.7;text-transform:uppercase;letter-spacing:1px">Índice de Sintropia</div>
+        <div class="ish-number" id="ish-numero">—</div>
+        <div class="ish-state" id="ish-estado">Preencha o registro do dia</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;opacity:0.7">Hoje</div>
+        <div id="ish-data" style="font-size:12px;margin-top:2px;opacity:0.9"></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:16px">
+      <div>
+        <div style="font-size:10px;opacity:0.6">Mais forte</div>
+        <div style="font-size:12px;font-weight:500" id="ish-forte">—</div>
+      </div>
+      <div>
+        <div style="font-size:10px;opacity:0.6">Atenção</div>
+        <div style="font-size:12px;font-weight:500" id="ish-fraca">—</div>
+      </div>
+    </div>
   </div>
 
   <p class="section-title">Registro de hoje</p>
@@ -593,6 +697,54 @@
         <div class="quick-card-label">Projetos de consultoria</div>
         <div class="quick-card-sub">Du-To Creative Studio · PRJ-001 · Discovery</div>
       </div>
+    </div>
+  </div>
+
+  <p class="section-title">Saúde e hábitos</p>
+  <div class="quick-cards">
+    <div class="quick-card" onclick="goTo('tabagismo')">
+      <div class="quick-card-icon icon-tab"><svg viewBox="0 0 24 24"><path d="M2 15h14v4H2z"/><path d="M16 15h6v4h-6z"/><path d="M17 11c0-2.76-2.24-5-5-5"/><path d="M22 11c0-5.52-4.48-10-10-10"/></svg></div>
+      <div class="quick-card-label">Tabagismo</div>
+      <div class="quick-card-sub">Meta: parar de fumar</div>
+    </div>
+    <div class="quick-card" onclick="goTo('alimentacao')">
+      <div class="quick-card-icon icon-ali"><svg viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="quick-card-label">Alimentação</div>
+      <div class="quick-card-sub">Refeições do dia</div>
+    </div>
+    <div class="quick-card" onclick="goTo('hidratacao')">
+      <div class="quick-card-icon icon-hid"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
+      <div class="quick-card-label">Hidratação</div>
+      <div class="quick-card-sub">Água e bebidas</div>
+    </div>
+    <div class="quick-card" onclick="goTo('saude')">
+      <div class="quick-card-icon icon-sau"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <div class="quick-card-label">Saúde</div>
+      <div class="quick-card-sub">Sintomas e médico</div>
+    </div>
+  </div>
+
+  <p class="section-title">Mente e conexões</p>
+  <div class="quick-cards">
+    <div class="quick-card" onclick="goTo('musica')">
+      <div class="quick-card-icon icon-mus"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      <div class="quick-card-label">Música</div>
+      <div class="quick-card-sub">Impacto emocional</div>
+    </div>
+    <div class="quick-card" onclick="goTo('relacionamento')">
+      <div class="quick-card-icon icon-rel"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <div class="quick-card-label">Relacionamentos</div>
+      <div class="quick-card-sub">Conexões do dia</div>
+    </div>
+    <div class="quick-card" onclick="goTo('financeiro')">
+      <div class="quick-card-icon icon-fin"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="quick-card-label">Finanças</div>
+      <div class="quick-card-sub">Entradas e saídas</div>
+    </div>
+    <div class="quick-card" onclick="goTo('proposito')">
+      <div class="quick-card-icon icon-prop"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="quick-card-label">Propósito</div>
+      <div class="quick-card-sub">Declarar · Revisar</div>
     </div>
   </div>
 </div>
@@ -1109,6 +1261,599 @@
   <button class="submit-btn" onclick="submitForm('consultoria')">Salvar registro de consultoria</button>
 </div>
 
+
+<!-- TABAGISMO -->
+<div class="screen" id="screen-tabagismo">
+  <p class="section-title">Tabagismo</p>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Fumou hoje?</label>
+      <label class="toggle"><input type="checkbox" id="fumou_hoje" onchange="toggleTab(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+  <div id="tab-campos" style="display:none">
+    <div class="card">
+      <div class="field">
+        <label>Tipo de cigarro</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'tipo_cigarro',0,'tabaco')">Tabaco</span>
+          <span class="chip" onclick="selectChip(this,'tipo_cigarro',0,'haxixe_tabaco')">Haxixe c/ tabaco</span>
+          <span class="chip" onclick="selectChip(this,'tipo_cigarro',0,'maconha')">Maconha</span>
+          <span class="chip" onclick="selectChip(this,'tipo_cigarro',0,'outro')">Outro</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Quantidade de cigarros</label>
+        <input type="number" min="1" placeholder="5" id="quantidade_cigarros">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Horário do primeiro cigarro</label>
+        <input type="time" id="horario_primeiro">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Gatilho</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'ansiedade')">Ansiedade</span>
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'estresse')">Estresse</span>
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'social')">Social</span>
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'habito')">Hábito</span>
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'tedio')">Tédio</span>
+          <span class="chip" onclick="selectChip(this,'gatilho',0,'outro')">Outro</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Vontade de fumar <span class="scale-value" id="val-nivel_vontade">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_vontade')" id="nivel_vontade">
+          <div class="scale-labels"><span>Nenhuma</span><span>Incontrolável</span></div>
+          <span class="scale-meaning" id="meaning-nivel_vontade">5 — Vontade moderada</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Resistência à vontade <span class="scale-value" id="val-nivel_resistencia">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_resistencia')" id="nivel_resistencia">
+          <div class="scale-labels"><span>Cedeu tudo</span><span>Resistiu tudo</span></div>
+          <span class="scale-meaning" id="meaning-nivel_resistencia">5 — Resistência moderada</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Comparado a ontem</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'menos')">Menos 👍</span>
+          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'igual')">Igual</span>
+          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'mais')">Mais 👎</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('tabagismo')">Salvar registro de tabagismo</button>
+</div>
+
+<!-- ALIMENTAÇÃO -->
+<div class="screen" id="screen-alimentacao">
+  <p class="section-title">Alimentação</p>
+  <div class="card">
+    <div class="field">
+      <label>Refeições do dia</label>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+        <div class="toggle-row"><label style="margin:0">☕ Café da manhã</label><label class="toggle"><input type="checkbox" id="cafe_da_manha"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">🍽️ Almoço</label><label class="toggle"><input type="checkbox" id="almoco"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">🍎 Lanche</label><label class="toggle"><input type="checkbox" id="lanche"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">🌙 Jantar</label><label class="toggle"><input type="checkbox" id="jantar"><span class="toggle-slider"></span></label></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="toggle-row">
+      <label style="margin:0">Comeu fruta hoje?</label>
+      <label class="toggle"><input type="checkbox" id="comeu_fruta"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="divider"></div>
+    <div class="toggle-row">
+      <label style="margin:0">Comeu verdura ou legume?</label>
+      <label class="toggle"><input type="checkbox" id="comeu_verdura"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Comeu besteira hoje?</label>
+      <label class="toggle"><input type="checkbox" id="comeu_besteira" onchange="toggleBesteira(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="besteira-campos" style="display:none;margin-top:12px">
+      <div class="field">
+        <label>O que comeu?</label>
+        <div class="chips" id="besteira-chips">
+          <span class="chip" onclick="toggleMultiChip(this)">Doce</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Açúcar</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Hambúrguer</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Cachorro quente</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Salgado</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Fritura</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Refrigerante</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Pizza</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Sorvete</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Outro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Qualidade da alimentação <span class="scale-value" id="val-qualidade_alimentacao">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'qualidade_alimentacao')" id="qualidade_alimentacao">
+        <div class="scale-labels"><span>Só besteira</span><span>Impecável</span></div>
+        <span class="scale-meaning" id="meaning-qualidade_alimentacao">5 — Razoável — equilibrado</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('alimentacao')">Salvar registro de alimentação</button>
+</div>
+
+<!-- HIDRATAÇÃO -->
+<div class="screen" id="screen-hidratacao">
+  <p class="section-title">Hidratação</p>
+  <div class="card">
+    <div class="field">
+      <label>Copos de água <span class="label-hint">200ml cada</span></label>
+      <input type="number" min="0" max="20" placeholder="8" id="copos_agua">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Xícaras de café</label>
+      <input type="number" min="0" placeholder="2" id="xicaras_cafe">
+    </div>
+    <div class="divider"></div>
+    <div class="toggle-row">
+      <label style="margin:0">Consumiu suco?</label>
+      <label class="toggle"><input type="checkbox" id="consumiu_suco" onchange="toggleSuco(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="suco-campos" style="display:none;margin-top:12px">
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'tipo_suco',0,'natural')">Natural</span>
+        <span class="chip" onclick="selectChip(this,'tipo_suco',0,'industrializado')">Industrializado</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="toggle-row">
+      <label style="margin:0">Consumiu refrigerante?</label>
+      <label class="toggle"><input type="checkbox" id="consumiu_refrigerante" onchange="toggleRefri(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="refri-campos" style="display:none;margin-top:12px">
+      <input type="number" min="0" placeholder="350 ml" id="ml_refrigerante">
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Consumiu álcool?</label>
+      <label class="toggle"><input type="checkbox" id="consumiu_alcool_hid" onchange="toggleAlcool(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="alcool-campos" style="display:none;margin-top:12px">
+      <div class="field">
+        <label>Tipo</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'tipo_alcool',0,'cerveja')">Cerveja</span>
+          <span class="chip" onclick="selectChip(this,'tipo_alcool',0,'vinho')">Vinho</span>
+          <span class="chip" onclick="selectChip(this,'tipo_alcool',0,'destilado')">Destilado</span>
+          <span class="chip" onclick="selectChip(this,'tipo_alcool',0,'drink')">Drink</span>
+          <span class="chip" onclick="selectChip(this,'tipo_alcool',0,'outro')">Outro</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Doses</label>
+        <input type="number" min="1" placeholder="2" id="doses_alcool">
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Nível de hidratação <span class="scale-value" id="val-nivel_hidratacao">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_hidratacao')" id="nivel_hidratacao">
+        <div class="scale-labels"><span>Desidratado</span><span>Excelente</span></div>
+        <span class="scale-meaning" id="meaning-nivel_hidratacao">5 — Razoável</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('hidratacao')">Salvar hidratação</button>
+</div>
+
+<!-- SAÚDE -->
+<div class="screen" id="screen-saude">
+  <p class="section-title">Saúde</p>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Está sentindo algum sintoma?</label>
+      <label class="toggle"><input type="checkbox" id="sentindo_sintomas" onchange="toggleSintomas(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="sintomas-campos" style="display:none;margin-top:12px">
+      <div class="field">
+        <label>Quais sintomas?</label>
+        <div class="chips" id="sintomas-chips">
+          <span class="chip" onclick="toggleMultiChip(this)">Febre</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Dor de cabeça</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Diarreia</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Náusea</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Dor de garganta</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Tosse</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Coriza</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Dor nas costas</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Dor muscular</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Fadiga</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Tontura</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Falta de ar</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Insônia</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Alergia</span>
+          <span class="chip" onclick="toggleMultiChip(this)">Outro</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Intensidade <span class="scale-value" id="val-intensidade_sintoma">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'intensidade_sintoma')" id="intensidade_sintoma">
+          <div class="scale-labels"><span>Leve</span><span>Incapacitante</span></div>
+          <span class="scale-meaning" id="meaning-intensidade_sintoma">5 — Moderado — afeta o dia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Sofreu algum acidente?</label>
+      <label class="toggle"><input type="checkbox" id="sofreu_acidente" onchange="toggleAcidente(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="acidente-campos" style="display:none;margin-top:12px">
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'queda')">Queda</span>
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'corte')">Corte</span>
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'batida')">Batida</span>
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'queimadura')">Queimadura</span>
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'entorse')">Entorse</span>
+        <span class="chip" onclick="selectChip(this,'tipo_acidente',0,'outro')">Outro</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Foi ao médico hoje?</label>
+      <label class="toggle"><input type="checkbox" id="foi_medico" onchange="toggleMedico(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="medico-campos" style="display:none;margin-top:12px">
+      <div class="field">
+        <label>Especialidade</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'especialidade',0,'clinico_geral')">Clínico geral</span>
+          <span class="chip" onclick="selectChip(this,'especialidade',0,'cardiologista')">Cardiologista</span>
+          <span class="chip" onclick="selectChip(this,'especialidade',0,'dermatologista')">Dermatologista</span>
+          <span class="chip" onclick="selectChip(this,'especialidade',0,'psiquiatra')">Psiquiatra</span>
+          <span class="chip" onclick="selectChip(this,'especialidade',0,'outro')">Outro</span>
+        </div>
+      </div>
+      <div class="divider" style="margin:10px 0"></div>
+      <div class="toggle-row"><label style="margin:0">Receitou remédio?</label><label class="toggle"><input type="checkbox" id="medico_receitou"><span class="toggle-slider"></span></label></div>
+      <div class="divider" style="margin:10px 0"></div>
+      <div class="toggle-row"><label style="margin:0">Tem atestado?</label><label class="toggle"><input type="checkbox" id="tem_atestado" onchange="toggleAtestado(this)"><span class="toggle-slider"></span></label></div>
+      <div id="atestado-campos" style="display:none;margin-top:10px">
+        <input type="number" min="1" placeholder="Quantos dias?" id="dias_atestado">
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Tomou medicamento?</label>
+      <label class="toggle"><input type="checkbox" id="tomou_medicamento" onchange="toggleMedicamento(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="medicamento-campos" style="display:none;margin-top:10px">
+      <input type="text" placeholder="Nome do medicamento" id="qual_medicamento">
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Bem-estar geral <span class="scale-value" id="val-bem_estar_geral">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'bem_estar_geral')" id="bem_estar_geral">
+        <div class="scale-labels"><span>Péssimo</span><span>Excelente</span></div>
+        <span class="scale-meaning" id="meaning-bem_estar_geral">7 — Boa saúde</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('saude')">Salvar registro de saúde</button>
+</div>
+
+<!-- MÚSICA -->
+<div class="screen" id="screen-musica">
+  <p class="section-title">Música</p>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Ouviu música hoje?</label>
+      <label class="toggle"><input type="checkbox" id="ouviu_musica" onchange="toggleMusica(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+  <div id="musica-campos" style="display:none">
+    <div class="card">
+      <div class="field">
+        <label>Gênero musical</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'latina')">Latina</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'hip_hop')">Hip Hop</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'musica_preta_brasileira')">Música Preta Brasileira</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'samba_raiz')">Samba Raiz</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'samba')">Samba</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'funk')">Funk</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'classica')">Clássica</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'frequencias_ruidos')">Frequências / Ruídos</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'rezo')">Rezo</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'mpb')">MPB</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'reggae')">Reggae</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'reggae_brasil')">Reggae Brasil</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'baiana')">Música Baiana</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'candomble')">Candomblé</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'americana_classica')">Americana Clássica</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'american_rap_underground')">American Rap Underground</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'gospel')">Gospel</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'jazz')">Jazz</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'blues')">Blues</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'eletronica')">Eletrônica</span>
+          <span class="chip" onclick="selectChip(this,'genero_musical',0,'outro')">Outro</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Contexto</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'trabalho')">Trabalho</span>
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'exercicio')">Exercício</span>
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'relaxamento')">Relaxamento</span>
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'meditacao')">Meditação</span>
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'transporte')">Transporte</span>
+          <span class="chip" onclick="selectChip(this,'contexto_musica',0,'social')">Social</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Minutos ouvindo</label>
+        <input type="number" min="1" placeholder="60" id="minutos_ouvindo">
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Impacto emocional <span class="scale-value" id="val-impacto_emocional_mus">7</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'impacto_emocional_mus')" id="impacto_emocional_mus">
+          <div class="scale-labels"><span>Nenhum</span><span>Transcendente</span></div>
+          <span class="scale-meaning" id="meaning-impacto_emocional_mus">7 — Música transformou o momento</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Emoção gerada</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'alegria')">Alegria</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'paz')">Paz</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'nostalgia')">Nostalgia</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'motivacao')">Motivação</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'tristeza')">Tristeza</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'energia')">Energia</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'foco')">Foco</span>
+          <span class="chip" onclick="selectChip(this,'emocao_gerada',0,'espiritualidade')">Espiritualidade</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Música ou artista marcante</label>
+        <input type="text" placeholder="Ex: Seu Jorge — A War Is Over" id="musica_marcante">
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('musica')">Salvar registro de música</button>
+</div>
+
+<!-- RELACIONAMENTO -->
+<div class="screen" id="screen-relacionamento">
+  <p class="section-title">Relacionamentos</p>
+  <div class="card">
+    <div class="field">
+      <label>Qualidade das conexões <span class="scale-value" id="val-qualidade_conexoes_rel">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'qualidade_conexoes_rel')" id="qualidade_conexoes_rel">
+        <div class="scale-labels"><span>Isolamento</span><span>Relações excepcionais</span></div>
+        <span class="scale-meaning" id="meaning-qualidade_conexoes_rel">7 — Conexões genuínas</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Engajamento social <span class="scale-value" id="val-engajamento_social">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'engajamento_social')" id="engajamento_social">
+        <div class="scale-labels"><span>Sem interação</span><span>Presença total</span></div>
+        <span class="scale-meaning" id="meaning-engajamento_social">7 — Bem presente nas interações</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Houve conflito hoje?</label>
+      <label class="toggle"><input type="checkbox" id="houve_conflito_rel" onchange="toggleConflito(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="conflito-campos" style="display:none;margin-top:12px">
+      <div class="field">
+        <label>Com quem?</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'pai')">Pai</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'mae')">Mãe</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'filho')">Filho(a)</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'esposa')">Esposa</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'irmao')">Irmão/Irmã</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'lider_direto')">Líder direto</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'liderado')">Liderado</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'parceiro')">Parceiro</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'socio')">Sócio</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'cliente')">Cliente</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'fornecedor')">Fornecedor</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'amigo')">Amigo</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'desconhecido')">Desconhecido</span>
+          <span class="chip" onclick="selectChip(this,'tipo_relacao_conflito',0,'outro')">Outro</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Intensidade <span class="scale-value" id="val-intensidade_conflito">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'intensidade_conflito')" id="intensidade_conflito">
+          <div class="scale-labels"><span>Leve</span><span>Ruptura total</span></div>
+          <span class="scale-meaning" id="meaning-intensidade_conflito">5 — Conflito claro — afetou o dia</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Resolução</label>
+        <div class="chips">
+          <span class="chip" onclick="selectChip(this,'resolucao_conflito',0,'resolvido')">Resolvido ✅</span>
+          <span class="chip" onclick="selectChip(this,'resolucao_conflito',0,'em_andamento')">Em andamento</span>
+          <span class="chip" onclick="selectChip(this,'resolucao_conflito',0,'nao_resolvido')">Não resolvido</span>
+          <span class="chip" onclick="selectChip(this,'resolucao_conflito',0,'evitado')">Evitado</span>
+        </div>
+      </div>
+      <div class="divider" style="margin:10px 0"></div>
+      <div class="toggle-row">
+        <label style="margin:0">Reconheceu sua parte?</label>
+        <label class="toggle"><input type="checkbox" id="assumiu_responsabilidade"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Interação mais significativa do dia</label>
+      <textarea placeholder="Descreva o momento de conexão mais marcante" id="interacao_significativa"></textarea>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Grato por alguém hoje?</label>
+      <input type="text" placeholder="Quem e por quê?" id="gratidao_alguem">
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('relacionamento')">Salvar relacionamentos</button>
+</div>
+
+<!-- FINANCEIRO -->
+<div class="screen" id="screen-financeiro">
+  <p class="section-title">Finanças</p>
+  <div class="card">
+    <div class="field">
+      <label>Entrada do dia <span class="label-hint">R$</span></label>
+      <input type="number" min="0" step="0.01" placeholder="0,00" id="entrada_fin">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Categoria da entrada</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'salario')">Salário</span>
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'freelance')">Freelance</span>
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'consultoria')">Consultoria</span>
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'investimento')">Investimento</span>
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'bonus')">Bônus</span>
+        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'outro')">Outro</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Saída do dia <span class="label-hint">R$</span></label>
+      <input type="number" min="0" step="0.01" placeholder="0,00" id="saida_fin">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Categoria da saída</label>
+      <div class="chips">
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'moradia')">Moradia</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'alimentacao')">Alimentação</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'saude')">Saúde</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'transporte')">Transporte</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'educacao')">Educação</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'lazer')">Lazer</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'vestuario')">Vestuário</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'assinatura')">Assinatura</span>
+        <span class="chip" onclick="selectChip(this,'cat_saida',0,'outro')">Outro</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="toggle-row">
+      <label style="margin:0">Teve gasto supérfluo?</label>
+      <label class="toggle"><input type="checkbox" id="gastou_suprafluo" onchange="toggleSuprafluo(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="suprafluo-campos" style="display:none;margin-top:10px">
+      <input type="text" placeholder="O que foi?" id="descricao_suprafluo">
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Satisfação financeira <span class="scale-value" id="val-satisfacao_financeira">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'satisfacao_financeira')" id="satisfacao_financeira">
+        <div class="scale-labels"><span>Crise</span><span>Pleno controle</span></div>
+        <span class="scale-meaning" id="meaning-satisfacao_financeira">5 — Neutro</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Ansiedade financeira <span class="scale-value" id="val-ansiedade_financeira">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'ansiedade_financeira')" id="ansiedade_financeira">
+        <div class="scale-labels"><span>Nenhuma</span><span>Crise</span></div>
+        <span class="scale-meaning" id="meaning-ansiedade_financeira">5 — Moderada</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" onclick="submitForm('financeiro')">Salvar registro financeiro</button>
+</div>
+
+<!-- PROPÓSITO -->
+<div class="screen" id="screen-proposito">
+  <p class="section-title">Propósito</p>
+  <div class="card" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-color:#FCD34D">
+    <p style="font-size:13px;color:#92400E;line-height:1.6">O propósito não é preenchido todo dia. Use este espaço para <strong>declarar</strong>, <strong>revisar</strong> ou <strong>registrar o alcance</strong> do seu propósito central.</p>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Seu propósito em uma frase</label>
+      <textarea placeholder="Ex: Ser um influenciador de Sintropia Humana que inspira e transforma vidas através de dados e desenvolvimento humano." id="descricao_proposito" style="min-height:100px"></textarea>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Data de alcance desejada</label>
+      <input type="date" id="data_alcance">
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Como saberei que cheguei lá?</label>
+      <textarea placeholder="Descreva os indicadores concretos de que seu propósito foi alcançado" id="indicadores_alcance"></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="field">
+      <label>Alinhamento atual <span class="scale-value" id="val-alinhamento_declarado">7</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="7" oninput="updateScale(this,'alinhamento_declarado')" id="alinhamento_declarado">
+        <div class="scale-labels"><span>Desviado</span><span>Pleno alinhamento</span></div>
+        <span class="scale-meaning" id="meaning-alinhamento_declarado">7 — Alinhado — alguma ação concreta</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Reflexão livre</label>
+      <textarea placeholder="O que este propósito significa para você hoje?" id="obs_proposito"></textarea>
+    </div>
+  </div>
+  <button class="prop-btn" onclick="submitForm('proposito')">
+    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Declarar Propósito
+  </button>
+</div>
+
 <!-- SUCCESS -->
 <div class="success-overlay" id="success-overlay">
   <div class="success-circle">
@@ -1117,6 +1862,48 @@
   <p class="success-text" id="success-text">Registro salvo!</p>
   <p class="success-sub" id="success-id"></p>
   <button class="submit-btn" style="width:200px;margin-top:8px" onclick="closeSuccess()">Voltar ao início</button>
+</div>
+
+<!-- MAIS MENU OVERLAY -->
+<div class="mais-overlay" id="mais-overlay" onclick="closeMais()"></div>
+
+<!-- MAIS MENU -->
+<div class="mais-menu" id="mais-menu">
+  <p style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">Mais registros</p>
+  <div class="mais-menu-grid">
+    <button class="mais-menu-item" onclick="goToMais('tabagismo')">
+      <div class="mais-menu-icon icon-tab"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M2 15h14v4H2z"/><path d="M16 15h6v4h-6z"/><path d="M17 11c0-2.76-2.24-5-5-5"/></svg></div>
+      <span class="mais-menu-label">Tabagismo</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('alimentacao')">
+      <div class="mais-menu-icon icon-ali"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <span class="mais-menu-label">Alimentação</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('hidratacao')">
+      <div class="mais-menu-icon icon-hid"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
+      <span class="mais-menu-label">Hidratação</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('saude')">
+      <div class="mais-menu-icon icon-sau"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <span class="mais-menu-label">Saúde</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('musica')">
+      <div class="mais-menu-icon icon-mus"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      <span class="mais-menu-label">Música</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('relacionamento')">
+      <div class="mais-menu-icon icon-rel"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <span class="mais-menu-label">Relações</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('financeiro')">
+      <div class="mais-menu-icon icon-fin"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <span class="mais-menu-label">Finanças</span>
+    </button>
+    <button class="mais-menu-item" onclick="goToMais('proposito')">
+      <div class="mais-menu-icon icon-prop"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <span class="mais-menu-label">Propósito</span>
+    </button>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -1137,9 +1924,9 @@
     <svg viewBox="0 0 24 24"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>
     <span class="nav-label">Idiomas</span>
   </button>
-  <button class="nav-item" onclick="goTo('consultoria')" id="nav-consultoria">
-    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-    <span class="nav-label">Projetos</span>
+  <button class="nav-item" onclick="toggleMais()" id="nav-mais">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    <span class="nav-label">Mais</span>
   </button>
 </nav>
 
@@ -1185,7 +1972,20 @@
     energia_pos_pratica: ['Mais cansado do que antes','Muito cansado após prática','Sem diferença percebida','Leve melhora de energia','Energia um pouco melhor','Neutro — ok para começar o dia','Levemente energizado','Bem energizado e focado','Muito energizado','Energia excelente','Transcendente — estado de fluxo total'],
     nivel_percebido: ['Sessão improdutiva','Evolução mínima','Evolução muito baixa','Evolução leve — pouco ficou','Algum progresso percebido','Evolução moderada','Boa evolução — progresso claro','Sessão muito produtiva','Evolução alta — algo clicou','Evolução muito alta','Excepcional — salto de nível'],
     nivel_energia_consult: ['Completamente travado no projeto','Energia mínima','Energia muito baixa','Abaixo do normal','Energia insuficiente','Energia neutra','Energia boa para o projeto','Alta energia e foco','Muito engajado e focado','Energia excepcional','Estado de fluxo total no projeto'],
-    satisfacao_consult: ['Projeto em colapso — risco máximo','Muito insatisfeito','Insatisfeito com o andamento','Abaixo do esperado','Avançando com dificuldade','Neutro — sem entusiasmo','Satisfeito com o progresso','Projeto fluindo bem','Muito satisfeito','Andamento excelente','Melhor cenário possível — realizado']
+    satisfacao_consult: ['Projeto em colapso — risco máximo','Muito insatisfeito','Insatisfeito com o andamento','Abaixo do esperado','Avançando com dificuldade','Neutro — sem entusiasmo','Satisfeito com o progresso','Projeto fluindo bem','Muito satisfeito','Andamento excelente','Melhor cenário possível — realizado'],
+    nivel_vontade: ['Nenhuma vontade','Vontade mínima','Vontade muito baixa','Vontade leve','Vontade moderada','Difícil ignorar','Vontade alta','Vontade muito alta','Quase cedeu','Resistência mínima','Incontrolável — não resistiu'],
+    nivel_resistencia: ['Cedeu tudo','Resistência mínima','Resistiu pouco','Resistiu um pouco','Resistência moderada','Equilibrado','Resistiu bem','Resistência alta','Muito forte','Quase total','Resistiu completamente — dia sem fumar'],
+    qualidade_alimentacao: ['Só besteira — sem refeição adequada','Muito ruim','Ruim','Maioria besteira','Pouco saudável','Razoável — equilibrado','Boa alimentação','Muito boa','Saudável e equilibrada','Quase impecável','Alimentação impecável'],
+    nivel_hidratacao: ['Desidratado — lábios secos, tontura','Muito desidratado','Hidratação muito baixa','Hidratação baixa','Abaixo do ideal','Razoável','Boa hidratação','Bem hidratado','Muito bem hidratado','Excelente hidratação','Hidratação perfeita'],
+    intensidade_sintoma: ['Sem sintoma','Levíssimo — quase imperceptível','Muito leve','Leve','Moderado leve','Moderado — afeta o dia','Intenso','Muito intenso','Severo','Muito severo','Incapacitante'],
+    bem_estar_geral: ['Péssimo — sem condições','Muito ruim','Ruim','Abaixo do normal','Razoável','Neutro — ok','Boa saúde','Muito bem','Excelente','Saúde ótima','Saúde perfeita — pleno vigor'],
+    impacto_emocional_mus: ['Nenhum impacto','Impacto mínimo','Muito leve','Leve influência','Impacto moderado leve','Impacto moderado','Música transformou o momento','Alto impacto','Impacto profundo — emocionou','Muito profundo','Experiência transcendente'],
+    qualidade_conexoes_rel: ['Isolamento total','Interações mínimas e vazias','Contato superficial leve','Contato superficial','Interações neutras leves','Interações neutras','Conexões genuínas','Conexões profundas','Muito profundas','Excepcionais','Dia de relações excepcionais — amor e presença total'],
+    engajamento_social: ['Sem interação alguma','Presença mínima','Participação muito baixa','Participação superficial','Engajamento parcial leve','Engajamento parcial','Bem presente nas interações','Muito presente','Completamente engajado','Presença quase total','Presença total — cada interação foi intencional'],
+    intensidade_conflito: ['Nenhum conflito','Tensão muito leve','Tensão leve','Desentendimento leve','Desentendimento moderado','Conflito claro — afetou o dia','Conflito intenso','Conflito muito intenso','Conflito severo — ruptura parcial','Ruptura quase total','Ruptura total — crise relacional'],
+    satisfacao_financeira: ['Crise — sem controle algum','Muito insatisfeito','Insatisfeito','Preocupado','Abaixo do esperado','Neutro','Satisfeito','Muito satisfeito','Bem satisfeito','Quase pleno controle','Pleno controle financeiro'],
+    ansiedade_financeira: ['Completamente tranquilo','Levíssima tensão','Tensão mínima','Leve preocupação','Ansiedade leve','Ansiedade moderada','Ansiedade alta','Ansiedade muito alta','Pensamentos acelerados','Ansiedade severa','Crise financeira — paralisia'],
+    alinhamento_declarado: ['Completamente desviado — sem conexão','Muito distante do propósito','Distante','Presente mas não agindo','Consciência sem ação','Neutro','Alinhado — alguma ação concreta','Muito alinhado','Avanço real hoje','Profundamente alinhado','Pleno — senti e agi no propósito hoje']
   };
 
   function buildLegend(key) {
@@ -1298,6 +2098,30 @@
       label = 'Registro de consultoria';
       const nomeProjSel = document.getElementById('nome_projeto').value;
       if (nomeProjSel) updateProjetoAposSubmit(nomeProjSel);
+    } else if (type === 'tabagismo') {
+      id = generateId('TAB');
+      label = 'Registro de tabagismo';
+    } else if (type === 'alimentacao') {
+      id = generateId('ALI');
+      label = 'Registro de alimentação';
+    } else if (type === 'hidratacao') {
+      id = generateId('HID');
+      label = 'Registro de hidratação';
+    } else if (type === 'saude') {
+      id = generateId('SAU');
+      label = 'Registro de saúde';
+    } else if (type === 'musica') {
+      id = generateId('MUS');
+      label = 'Registro de música';
+    } else if (type === 'relacionamento') {
+      id = generateId('REL');
+      label = 'Registro de relacionamentos';
+    } else if (type === 'financeiro') {
+      id = generateId('FIN');
+      label = 'Registro financeiro';
+    } else if (type === 'proposito') {
+      id = generateId('PRP');
+      label = 'Propósito declarado';
     }
 
     document.getElementById('success-text').textContent = label + ' salvo!';
@@ -1387,6 +2211,65 @@
       saveProjetos(projetos);
     }
   })();
+
+  // ── MAIS MENU ─────────────────────────────────────────────────────────────
+  function toggleMais() {
+    document.getElementById('mais-menu').classList.toggle('open');
+    document.getElementById('mais-overlay').classList.toggle('open');
+  }
+
+  function closeMais() {
+    document.getElementById('mais-menu').classList.remove('open');
+    document.getElementById('mais-overlay').classList.remove('open');
+  }
+
+  function goToMais(screen) {
+    closeMais();
+    goTo(screen);
+  }
+
+  // ── TOGGLES NOVAS SEÇÕES ──────────────────────────────────────────────────
+  function toggleTab(cb) {
+    document.getElementById('tab-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleBesteira(cb) {
+    document.getElementById('besteira-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleSuco(cb) {
+    document.getElementById('suco-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleRefri(cb) {
+    document.getElementById('refri-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleAlcool(cb) {
+    document.getElementById('alcool-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleSintomas(cb) {
+    document.getElementById('sintomas-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleAcidente(cb) {
+    document.getElementById('acidente-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleMedico(cb) {
+    document.getElementById('medico-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleAtestado(cb) {
+    document.getElementById('atestado-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleMedicamento(cb) {
+    document.getElementById('medicamento-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleMusica(cb) {
+    document.getElementById('musica-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleConflito(cb) {
+    document.getElementById('conflito-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+  function toggleSuprafluo(cb) {
+    document.getElementById('suprafluo-campos').style.display = cb.checked ? 'block' : 'none';
+  }
+
+  // ── SUBMIT NOVAS SEÇÕES ───────────────────────────────────────────────────
 
   setDate();
   updateGreeting();
