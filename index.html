@@ -4516,216 +4516,167 @@
   
 
   function coletarDados(type) {
-
     const now = new Date();
+    const date = now.toISOString().slice(0,10);
 
-    const horariosExecucao = {
-      'tarefas': 'tarefas_horario_execucao',
+    function v(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      if (el.type === 'checkbox') return el.checked;
+      if (el.type === 'number') return el.value !== '' ? parseFloat(el.value) : null;
+      return el.value || null;
+    }
+    function chip(key) { return chipData[key] !== undefined ? chipData[key] : null; }
+    function multiChip(key) { return JSON.stringify(chipMultiValues[key] || []); }
+
+    const base = { data_registro: date };
+
+    if (type === 'diario') return { ...base, horario_execucao: null,
+      horas_sono: v('horas_sono'), energia: v('energia'), humor: v('humor'),
+      clareza_mental: v('clareza_mental'), ansiedade: v('ansiedade'),
+      proposito: v('proposito'), presenca_familia: v('presenca_familia'),
+      satisfacao_trabalho: v('satisfacao_trabalho'), exercicio: v('exercicio'),
+      fumou_hoje: v('fumou_hoje'), qualidade_alimentacao: v('qualidade_alimentacao'),
+      copos_agua: v('copos_agua'), consumiu_alcool: v('consumiu_alcool'),
+      ouviu_musica: v('ouviu_musica'), houve_conflito: v('houve_conflito'),
     };
-    const secosSemHorario = ['intimidade'];
-    const horExecId = horariosExecucao[type] || 'horario_execucao';
-    const dados = {
-      data_registro: now.toISOString().slice(0,10),
+
+    if (type === 'visualizacao') return { ...base,
+      horario_execucao: v('horario_vis'), duracao_minutos: v('duracao_vis'),
+      pratica_realizada: v('pratica_realizada'), etapas_concluidas: chip('etapas_concluidas'),
+      conexao_proposito: v('conexao_proposito'), nivel_gratidao: v('nivel_gratidao'),
+      clareza_visao: v('clareza_visao'), energia_pos_pratica: v('energia_pos_pratica'),
+      emocao: chip('emocao'), afirmacao_mais_forte: v('afirmacao_mais_forte'),
+      visao_mais_viva: v('visao_mais_viva'),
     };
-    if (!secosSemHorario.includes(type)) {
-      dados.horario_execucao = document.getElementById(horExecId) ?
-        document.getElementById(horExecId).value || null : null;
+
+    if (type === 'atividade') return { ...base,
+      horario_execucao: v('horario_treino'), duracao_minutos: v('duracao_treino'),
+      atividade_realizada: v('atividade_realizada'), tipo_atividade: chip('tipo_atividade'),
+      nivel_esforco: v('nivel_esforco'), satisfacao_treino: v('satisfacao_treino'),
+      disposicao_pre: v('disposicao_pre'), disposicao_pos: v('disposicao_pos'),
+      peso_kg: v('peso_kg'), pressao_sistolica: v('pressao_sistolica'),
+      pressao_diastolica: v('pressao_diastolica'),
+    };
+
+    if (type === 'idiomas') return { ...base,
+      horario_execucao: v('horario_idioma'), idioma: chip('idioma'),
+      pilar: chip('pilar'), fase: chip('fase'), atividade_idioma: chip('atividade_idioma'),
+      minutos_pratica: v('minutos_pratica'), vocabulario_novo: v('vocabulario_novo'),
+      nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
+    };
+
+    if (type === 'consultoria') {
+      const chips = document.querySelectorAll('#competencias-chips .chip.selected');
+      const competencias = Array.from(chips).map(c => c.textContent.trim()).join(', ');
+      return { ...base,
+        horario_execucao: v('horario_consult'), nome_projeto: v('nome_projeto'),
+        tipo_projeto: chip('tipo_projeto'), modelo_comercial: chip('modelo_comercial'),
+        contrato_status: chip('contrato_status'), fase_atual: chip('fase_atual'),
+        sprint_atual: v('sprint_atual'), horas_sprint: v('horas_sprint'),
+        competencias_desenvolvidas: competencias,
+        nivel_energia: v('nivel_energia_consult'), satisfacao: v('satisfacao_consult'),
+        aprendizado_sprint: v('aprendizado_sprint'), bloqueio: v('bloqueio'),
+        proximo_passo: v('proximo_passo'),
+      };
     }
 
-  
-
-    const campos = {
-
-      'diario': ['horas_sono','energia','humor','clareza_mental','ansiedade',
-
-        'proposito','presenca_familia','satisfacao_trabalho',
-
-        'atividade_fisica','nivel_esforco','satisfacao_treino',
-
-        'fumou_hoje','cigarros_hoje','qualidade_alimentacao',
-
-        'copos_agua','consumiu_alcool','ouviu_musica','impacto_musica',
-
-        'houve_conflito','qualidade_conexoes'],
-
-      'visualizacao': ['horario_vis','duracao_vis','conexao_proposito',
-
-        'nivel_gratidao','clareza_visao','energia_pos_pratica',
-
-        'afirmacao_mais_forte','visao_mais_viva'],
-
-      'atividade': ['horario_treino','duracao_treino','nivel_esforco',
-
-        'satisfacao_treino','disposicao_pre','disposicao_pos',
-
-        'peso_kg','pressao_sistolica','pressao_diastolica'],
-
-      'idiomas': ['horario_idioma','minutos_pratica','vocabulario_novo',
-
-        'nivel_percebido','dificuldade_idioma'],
-
-      'consultoria': ['nome_projeto','sprint_atual','horas_sprint',
-
-        'horario_consult','aprendizado_sprint','bloqueio','proximo_passo',
-
-        'nivel_energia_consult','satisfacao_consult'],
-
-      'tabagismo': ['quantidade_cigarros','horario_primeiro',
-
-        'nivel_vontade','nivel_resistencia'],
-
-      'alimentacao': ['qualidade_alimentacao'],
-
-      'hidratacao': ['copos_agua','xicaras_cafe','ml_refrigerante','doses_alcool',
-
-        'nivel_hidratacao'],
-
-      'saude': ['intensidade_sintoma','dias_atestado','qual_medicamento',
-
-        'bem_estar_geral'],
-
-      'musica': ['minutos_ouvindo','impacto_emocional_mus','musica_marcante'],
-
-      'relacionamento': ['qualidade_conexoes_rel','engajamento_social',
-
-        'interacao_significativa','gratidao_alguem'],
-
-      'financeiro': ['entrada_fin','saida_fin','descricao_suprafluo',
-
-        'satisfacao_financeira','ansiedade_financeira'],
-
-      'tarefas': ['satisfacao_tarefas','outras_tarefas'],
-      'intimidade': ['satisfacao_intimidade','conexao_emocional','qualidade_masturbacao',
-        'intimidade_observacoes'],
-      'proposito': ['descricao_proposito','data_alcance','indicadores_alcance',
-
-        'alinhamento_declarado','obs_proposito'],
-
+    if (type === 'tabagismo') return { ...base, horario_execucao: null,
+      fumou_hoje: v('fumou_hoje'), tipo_cigarro: chip('tipo_cigarro'),
+      quantidade_cigarros: v('quantidade_cigarros'), horario_primeiro: v('horario_primeiro'),
+      gatilho: chip('gatilho'), nivel_vontade: v('nivel_vontade'),
+      nivel_resistencia: v('nivel_resistencia'), comparado_ontem: chip('comparado_ontem'),
     };
 
-  
-
-    // Coleta campos de texto/número
-
-    (campos[type] || []).forEach(id => {
-
-      const el = document.getElementById(id);
-
-      if (!el) return;
-
-      const v = el.type === 'number' ? (el.value ? parseFloat(el.value) : null)
-
-               : el.type === 'checkbox' ? el.checked
-
-               : el.value || null;
-
-      // Mapeia nomes de campo do HTML para nomes da tabela
-
-      const mapa = {
-
-        'horario_vis': 'horario_execucao',
-
-        'duracao_vis': 'duracao_minutos',
-
-        'horario_treino': 'horario_execucao',
-
-        'duracao_treino': 'duracao_minutos',
-
-        'horario_idioma': 'horario_execucao',
-
-        'dificuldade_idioma': 'dificuldade',
-
-        'horario_consult': 'horario_execucao',
-
-        'nivel_energia_consult': 'nivel_energia',
-
-        'satisfacao_consult': 'satisfacao',
-
-        'impacto_emocional_mus': 'impacto_emocional',
-
-        'musica_marcante': 'musica_ou_artista_marcante',
-
-        'qualidade_conexoes_rel': 'qualidade_conexoes',
-
-        'interacao_significativa': 'interacao_mais_significativa',
-
-        'gratidao_alguem': 'gratidao_por_alguem',
-
-        'entrada_fin': 'entrada',
-
-        'saida_fin': 'saida',
-
-        'desc_proposito': 'descricao_proposito',
-
-        'obs_proposito': 'observacoes',
-
-      };
-
-      const chave = mapa[id] || id;
-
-      dados[chave] = v;
-
-    });
-
-  
-
-    // Coleta chips (single select) — filtra apenas campos da seção atual
-    const camposValidosPorSecao = {
-      'diario': ['energia','humor','clareza_mental','ansiedade','proposito','presenca_familia','satisfacao_trabalho','nivel_esforco','satisfacao_treino','horas_sono','exercicio','fumou_hoje','ouviu_musica','houve_conflito','consumiu_alcool'],
-      'visualizacao': ['conexao_proposito','nivel_gratidao','clareza_visao','energia_pos_pratica','emocao','etapas_concluidas','pratica_realizada'],
-      'atividade': ['tipo_atividade','nivel_esforco','satisfacao_treino','disposicao_pre','disposicao_pos','atividade_realizada'],
-      'idiomas': ['idioma','pilar','fase','atividade_idioma','nivel_percebido'],
-      'consultoria': ['nome_projeto','tipo_projeto','modelo_comercial','contrato_status','fase_atual','nivel_energia_consult','satisfacao_consult'],
-      'tabagismo': ['tipo_cigarro','gatilho','comparado_ontem','fumou_hoje','nivel_vontade','nivel_resistencia'],
-      'alimentacao': ['qualidade_alimentacao','cafe_da_manha','almoco','lanche','jantar','comeu_besteira','comeu_fruta','comeu_verdura'],
-      'hidratacao': ['tipo_suco','tipo_alcool','nivel_hidratacao','consumiu_suco','consumiu_refrigerante','consumiu_alcool_hid'],
-      'saude': ['tipo_acidente','especialidade','intensidade_sintoma','bem_estar_geral','sentindo_sintomas','sofreu_acidente','foi_medico','medico_receitou','tem_atestado','tomou_medicamento'],
-      'musica': ['genero_musical','contexto_musica','emocao_gerada','impacto_emocional_mus','ouviu_musica'],
-      'relacionamento': ['tipo_relacao_conflito','resolucao_conflito','qualidade_conexoes_rel','engajamento_social','houve_conflito_rel','assumiu_responsabilidade'],
-      'financeiro': ['cat_entrada','cat_saida','satisfacao_financeira','ansiedade_financeira','gastou_suprafluo'],
-      'proposito': ['alinhamento_declarado'],
-      'tarefas': ['tipo_faxina','qtd_banheiros_varridos','qtd_quartos_varridos','pano_quarto_ambos','satisfacao_tarefas','fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto','varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area','tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa','fez_cafe_manha','fez_almoco','fez_lanche','fez_jantar','fez_pao'],
-      'intimidade': ['tipo_parceiro','genero_parceiro','orientacao_sexual','houve_intimidade','houve_masturbacao','foi_em_grupo','satisfacao_intimidade','conexao_emocional','qualidade_masturbacao'],
+    if (type === 'alimentacao') return { ...base, horario_execucao: null,
+      cafe_da_manha: v('cafe_da_manha'), almoco: v('almoco'),
+      lanche: v('lanche'), jantar: v('jantar'),
+      comeu_besteira: v('comeu_besteira'), comeu_fruta: v('comeu_fruta'),
+      comeu_verdura: v('comeu_verdura'), qualidade_alimentacao: v('qualidade_alimentacao'),
     };
-    const camposValidos = camposValidosPorSecao[type] || [];
-    Object.keys(chipData).forEach(k => {
-      if (chipData[k] !== undefined && (camposValidos.includes(k) || camposValidos.length === 0)) {
-        dados[k] = chipData[k];
-      }
-    });
 
-  
-
-    // Coleta checkboxes booleanos — apenas os da seção atual
-    const boolsPorSecao = {
-      'diario': ['fumou_hoje','exercicio','ouviu_musica','houve_conflito','consumiu_alcool'],
-      'visualizacao': ['pratica_realizada'],
-      'atividade': ['atividade_realizada'],
-      'tabagismo': ['fumou_hoje'],
-      'alimentacao': ['cafe_da_manha','almoco','lanche','jantar','comeu_besteira','comeu_fruta','comeu_verdura'],
-      'hidratacao': ['consumiu_suco','consumiu_refrigerante','consumiu_alcool_hid'],
-      'saude': ['sentindo_sintomas','sofreu_acidente','foi_medico','medico_receitou','tem_atestado','tomou_medicamento'],
-      'musica': ['ouviu_musica'],
-      'relacionamento': ['houve_conflito_rel','assumiu_responsabilidade'],
-      'financeiro': ['gastou_suprafluo'],
-      'tarefas': ['fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto',
-        'varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area',
-        'tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa',
-        'fez_cafe_manha','fez_almoco','fez_lanche','fez_jantar','fez_pao'],
-      'intimidade': ['houve_intimidade','houve_masturbacao','foi_em_grupo'],
+    if (type === 'hidratacao') return { ...base, horario_execucao: null,
+      copos_agua: v('copos_agua'), xicaras_cafe: v('xicaras_cafe'),
+      consumiu_suco: v('consumiu_suco'), tipo_suco: chip('tipo_suco'),
+      consumiu_refrigerante: v('consumiu_refrigerante'), ml_refrigerante: v('ml_refrigerante'),
+      consumiu_alcool: v('consumiu_alcool_hid'), tipo_alcool: chip('tipo_alcool'),
+      doses_alcool: v('doses_alcool'), nivel_hidratacao: v('nivel_hidratacao'),
     };
-    (boolsPorSecao[type] || []).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) dados[id] = el.checked;
-    });
 
-  
+    if (type === 'saude') return { ...base, horario_execucao: null,
+      sentindo_sintomas: v('sentindo_sintomas'), intensidade_sintoma: v('intensidade_sintoma'),
+      sofreu_acidente: v('sofreu_acidente'), tipo_acidente: chip('tipo_acidente'),
+      foi_medico: v('foi_medico'), especialidade: chip('especialidade'),
+      medico_receitou: v('medico_receitou'), tem_atestado: v('tem_atestado'),
+      dias_atestado: v('dias_atestado'), tomou_medicamento: v('tomou_medicamento'),
+      qual_medicamento: v('qual_medicamento'), bem_estar_geral: v('bem_estar_geral'),
+    };
 
-    return dados;
+    if (type === 'musica') return { ...base, horario_execucao: null,
+      ouviu_musica: v('ouviu_musica'), genero_musical: chip('genero_musical'),
+      contexto_musica: chip('contexto_musica'), minutos_ouvindo: v('minutos_ouvindo'),
+      impacto_emocional: v('impacto_emocional_mus'), emocao_gerada: chip('emocao_gerada'),
+      musica_ou_artista_marcante: v('musica_marcante'),
+    };
 
+    if (type === 'relacionamento') return { ...base, horario_execucao: null,
+      qualidade_conexoes: v('qualidade_conexoes_rel'),
+      engajamento_social: v('engajamento_social'),
+      houve_conflito: v('houve_conflito_rel'),
+      tipo_relacao_conflito: chip('tipo_relacao_conflito'),
+      intensidade_conflito: v('intensidade_conflito'),
+      resolucao_conflito: chip('resolucao_conflito'),
+      assumiu_responsabilidade: v('assumiu_responsabilidade'),
+      interacao_mais_significativa: v('interacao_significativa'),
+      gratidao_por_alguem: v('gratidao_alguem'),
+    };
+
+    if (type === 'financeiro') return { ...base, horario_execucao: null,
+      entrada: v('entrada_fin'), cat_entrada: chip('cat_entrada'),
+      saida: v('saida_fin'), cat_saida: chip('cat_saida'),
+      gastou_suprafluo: v('gastou_suprafluo'), descricao_suprafluo: v('descricao_suprafluo'),
+      satisfacao_financeira: v('satisfacao_financeira'),
+      ansiedade_financeira: v('ansiedade_financeira'),
+    };
+
+    if (type === 'proposito') return { ...base, horario_execucao: null,
+      descricao_proposito: v('descricao_proposito'), data_alcance: v('data_alcance'),
+      indicadores_alcance: v('indicadores_alcance'),
+      alinhamento_declarado: v('alinhamento_declarado'),
+      observacoes: v('obs_proposito'),
+    };
+
+    if (type === 'tarefas') return { ...base,
+      horario_execucao: v('tarefas_horario_execucao'),
+      fez_faxina: v('fez_faxina'), tipo_faxina: chip('tipo_faxina'),
+      tirou_poeira: v('tirou_poeira'), locais_poeira: multiChip('locais_poeira'),
+      varreu_sala: v('varreu_sala'), varreu_cozinha: v('varreu_cozinha'),
+      varreu_banheiro: v('varreu_banheiro'), qtd_banheiros_varridos: chip('qtd_banheiros_varridos'),
+      varreu_quarto: v('varreu_quarto'), qtd_quartos_varridos: chip('qtd_quartos_varridos'),
+      varreu_area: v('varreu_area'),
+      passou_pano: v('pano_sala') || v('pano_cozinha') || v('pano_banheiro') || v('pano_quarto') || v('pano_area') || false,
+      pano_sala: v('pano_sala'), pano_cozinha: v('pano_cozinha'),
+      pano_banheiro: v('pano_banheiro'), pano_quarto: v('pano_quarto'),
+      pano_quarto_ambos: chip('pano_quarto_ambos'), pano_area: v('pano_area'),
+      lavou_roupa: v('lavou_roupa'), estendeu_roupa: v('estendeu_roupa'),
+      tirou_do_varal: v('tirou_do_varal'), guardou_roupa: v('guardou_roupa'),
+      fez_cafe_manha: v('fez_cafe_manha'), fez_almoco: v('fez_almoco'),
+      fez_lanche: v('fez_lanche'), fez_jantar: v('fez_jantar'), fez_pao: v('fez_pao'),
+      outras_tarefas: v('outras_tarefas'), satisfacao_tarefas: v('satisfacao_tarefas'),
+    };
+
+    if (type === 'intimidade') return { ...base,
+      houve_intimidade: v('houve_intimidade'), houve_masturbacao: v('houve_masturbacao'),
+      tipo_parceiro: chip('tipo_parceiro'), genero_parceiro: chip('genero_parceiro'),
+      orientacao_sexual: chip('orientacao_sexual'), foi_em_grupo: v('foi_em_grupo'),
+      satisfacao_intimidade: v('satisfacao_intimidade'),
+      conexao_emocional: v('conexao_emocional'),
+      qualidade_masturbacao: v('qualidade_masturbacao'),
+      observacoes: v('intimidade_observacoes'),
+    };
+
+    return base;
   }
-
-  
 
   async function submitForm(type) {
 
