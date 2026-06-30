@@ -3849,10 +3849,10 @@
 
   <div class="card">
     <p style="font-weight:600;color:var(--verde);margin-bottom:12px">🍳 Cozinha</p>
-    <div class="toggle-row"><label style="margin:0">☕ Café da manhã</label><label class="toggle"><input type="checkbox" id="tarefas_cafe_manha"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🍽️ Almoço</label><label class="toggle"><input type="checkbox" id="tarefas_almoco"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🍎 Lanche</label><label class="toggle"><input type="checkbox" id="tarefas_lanche"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🌙 Jantar</label><label class="toggle"><input type="checkbox" id="tarefas_jantar"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><label style="margin:0">☕ Café da manhã</label><label class="toggle"><input type="checkbox" id="fez_cafe_manha"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><label style="margin:0">🍽️ Almoço</label><label class="toggle"><input type="checkbox" id="fez_almoco"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><label style="margin:0">🍎 Lanche</label><label class="toggle"><input type="checkbox" id="fez_lanche"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><label style="margin:0">🌙 Jantar</label><label class="toggle"><input type="checkbox" id="fez_jantar"><span class="toggle-slider"></span></label></div>
     <div class="toggle-row"><label style="margin:0">🍞 Fez pão?</label><label class="toggle"><input type="checkbox" id="fez_pao"><span class="toggle-slider"></span></label></div>
   </div>
 
@@ -4521,14 +4521,16 @@
 
     const horariosExecucao = {
       'tarefas': 'tarefas_horario_execucao',
-      'intimidade': 'intimidade_horario_execucao',
     };
+    const secosSemHorario = ['intimidade'];
     const horExecId = horariosExecucao[type] || 'horario_execucao';
     const dados = {
       data_registro: now.toISOString().slice(0,10),
-      horario_execucao: document.getElementById(horExecId) ?
-        document.getElementById(horExecId).value || null : null,
     };
+    if (!secosSemHorario.includes(type)) {
+      dados.horario_execucao = document.getElementById(horExecId) ?
+        document.getElementById(horExecId).value || null : null;
+    }
 
   
 
@@ -4682,7 +4684,7 @@
       'relacionamento': ['tipo_relacao_conflito','resolucao_conflito','qualidade_conexoes_rel','engajamento_social','houve_conflito_rel','assumiu_responsabilidade'],
       'financeiro': ['cat_entrada','cat_saida','satisfacao_financeira','ansiedade_financeira','gastou_suprafluo'],
       'proposito': ['alinhamento_declarado'],
-      'tarefas': ['tipo_faxina','qtd_banheiros_varridos','qtd_quartos_varridos','pano_quarto_ambos','satisfacao_tarefas','fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto','varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area','tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa','tarefas_cafe_manha','tarefas_almoco','tarefas_lanche','tarefas_jantar','fez_pao'],
+      'tarefas': ['tipo_faxina','qtd_banheiros_varridos','qtd_quartos_varridos','pano_quarto_ambos','satisfacao_tarefas','fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto','varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area','tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa','fez_cafe_manha','fez_almoco','fez_lanche','fez_jantar','fez_pao'],
       'intimidade': ['tipo_parceiro','genero_parceiro','orientacao_sexual','houve_intimidade','houve_masturbacao','foi_em_grupo','satisfacao_intimidade','conexao_emocional','qualidade_masturbacao'],
     };
     const camposValidos = camposValidosPorSecao[type] || [];
@@ -4709,7 +4711,7 @@
       'tarefas': ['fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto',
         'varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area',
         'tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa',
-        'tarefas_cafe_manha','tarefas_almoco','tarefas_lanche','tarefas_jantar','fez_pao'],
+        'fez_cafe_manha','fez_almoco','fez_lanche','fez_jantar','fez_pao'],
       'intimidade': ['houve_intimidade','houve_masturbacao','foi_em_grupo'],
     };
     (boolsPorSecao[type] || []).forEach(id => {
