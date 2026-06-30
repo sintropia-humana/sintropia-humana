@@ -4519,14 +4519,15 @@
 
     const now = new Date();
 
+    const horariosExecucao = {
+      'tarefas': 'tarefas_horario_execucao',
+      'intimidade': 'intimidade_horario_execucao',
+    };
+    const horExecId = horariosExecucao[type] || 'horario_execucao';
     const dados = {
-
       data_registro: now.toISOString().slice(0,10),
-
-      horario_execucao: document.getElementById('horario_execucao') ?
-
-        document.getElementById('horario_execucao').value || null : null,
-
+      horario_execucao: document.getElementById(horExecId) ?
+        document.getElementById(horExecId).value || null : null,
     };
 
   
@@ -4591,6 +4592,9 @@
 
         'satisfacao_financeira','ansiedade_financeira'],
 
+      'tarefas': ['satisfacao_tarefas','outras_tarefas'],
+      'intimidade': ['satisfacao_intimidade','conexao_emocional','qualidade_masturbacao',
+        'intimidade_observacoes'],
       'proposito': ['descricao_proposito','data_alcance','indicadores_alcance',
 
         'alinhamento_declarado','obs_proposito'],
@@ -4673,26 +4677,27 @@
 
   
 
-    // Coleta checkboxes booleanos especiais
-
-    const bools = ['fumou_hoje','atividade_fisica','exercicio','pratica_realizada',
-
-      'atividade_realizada','cafe_da_manha','almoco','lanche','jantar',
-
-      'comeu_besteira','comeu_fruta','comeu_verdura','consumiu_alcool',
-
-      'consumiu_refrigerante','consumiu_cafe','consumiu_suco','ouviu_musica',
-
-      'houve_conflito','foi_medico','sofreu_acidente','tomou_medicamento',
-
-      'medico_receitou','tem_atestado','gastou_suprafluo','assumiu_responsabilidade'];
-
-    bools.forEach(id => {
-
+    // Coleta checkboxes booleanos — apenas os da seção atual
+    const boolsPorSecao = {
+      'diario': ['fumou_hoje','exercicio','ouviu_musica','houve_conflito','consumiu_alcool'],
+      'visualizacao': ['pratica_realizada'],
+      'atividade': ['atividade_realizada'],
+      'tabagismo': ['fumou_hoje'],
+      'alimentacao': ['cafe_da_manha','almoco','lanche','jantar','comeu_besteira','comeu_fruta','comeu_verdura'],
+      'hidratacao': ['consumiu_suco','consumiu_refrigerante','consumiu_alcool_hid'],
+      'saude': ['sentindo_sintomas','sofreu_acidente','foi_medico','medico_receitou','tem_atestado','tomou_medicamento'],
+      'musica': ['ouviu_musica'],
+      'relacionamento': ['houve_conflito_rel','assumiu_responsabilidade'],
+      'financeiro': ['gastou_suprafluo'],
+      'tarefas': ['fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto',
+        'varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area',
+        'tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa',
+        'tarefas_cafe_manha','tarefas_almoco','tarefas_lanche','tarefas_jantar','fez_pao'],
+      'intimidade': ['houve_intimidade','houve_masturbacao','foi_em_grupo'],
+    };
+    (boolsPorSecao[type] || []).forEach(id => {
       const el = document.getElementById(id);
-
       if (el) dados[id] = el.checked;
-
     });
 
   
