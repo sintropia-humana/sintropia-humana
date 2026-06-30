@@ -1752,17 +1752,17 @@
 
         <div class="chips" id="etapas-chips">
 
-          <span class="chip" onclick="selectChip(this,'etapas_concluidas',1)">1</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,1)">1</span>
 
-          <span class="chip" onclick="selectChip(this,'etapas_concluidas',2)">2</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,2)">2</span>
 
-          <span class="chip" onclick="selectChip(this,'etapas_concluidas',3)">3</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,3)">3</span>
 
-          <span class="chip" onclick="selectChip(this,'etapas_concluidas',4)">4</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,4)">4</span>
 
-          <span class="chip" onclick="selectChip(this,'etapas_concluidas',5)">5</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,5)">5</span>
 
-          <span class="chip selected" onclick="selectChip(this,'etapas_concluidas',6)">6 — completo</span>
+          <span class="chip" onclick="selectChip(this,'etapas_concluidas',0,6)">6 — completo</span>
 
         </div>
 
@@ -4667,12 +4667,29 @@
 
   
 
-    // Coleta chips (single select)
-
+    // Coleta chips (single select) — filtra apenas campos da seção atual
+    const camposValidosPorSecao = {
+      'diario': ['energia','humor','clareza_mental','ansiedade','proposito','presenca_familia','satisfacao_trabalho','nivel_esforco','satisfacao_treino','horas_sono','exercicio','fumou_hoje','ouviu_musica','houve_conflito','consumiu_alcool'],
+      'visualizacao': ['conexao_proposito','nivel_gratidao','clareza_visao','energia_pos_pratica','emocao','etapas_concluidas','pratica_realizada'],
+      'atividade': ['tipo_atividade','nivel_esforco','satisfacao_treino','disposicao_pre','disposicao_pos','atividade_realizada'],
+      'idiomas': ['idioma','pilar','fase','atividade_idioma','nivel_percebido'],
+      'consultoria': ['nome_projeto','tipo_projeto','modelo_comercial','contrato_status','fase_atual','nivel_energia_consult','satisfacao_consult'],
+      'tabagismo': ['tipo_cigarro','gatilho','comparado_ontem','fumou_hoje','nivel_vontade','nivel_resistencia'],
+      'alimentacao': ['qualidade_alimentacao','cafe_da_manha','almoco','lanche','jantar','comeu_besteira','comeu_fruta','comeu_verdura'],
+      'hidratacao': ['tipo_suco','tipo_alcool','nivel_hidratacao','consumiu_suco','consumiu_refrigerante','consumiu_alcool_hid'],
+      'saude': ['tipo_acidente','especialidade','intensidade_sintoma','bem_estar_geral','sentindo_sintomas','sofreu_acidente','foi_medico','medico_receitou','tem_atestado','tomou_medicamento'],
+      'musica': ['genero_musical','contexto_musica','emocao_gerada','impacto_emocional_mus','ouviu_musica'],
+      'relacionamento': ['tipo_relacao_conflito','resolucao_conflito','qualidade_conexoes_rel','engajamento_social','houve_conflito_rel','assumiu_responsabilidade'],
+      'financeiro': ['cat_entrada','cat_saida','satisfacao_financeira','ansiedade_financeira','gastou_suprafluo'],
+      'proposito': ['alinhamento_declarado'],
+      'tarefas': ['tipo_faxina','qtd_banheiros_varridos','qtd_quartos_varridos','pano_quarto_ambos','satisfacao_tarefas','fez_faxina','varreu_sala','varreu_cozinha','varreu_banheiro','varreu_quarto','varreu_area','pano_sala','pano_cozinha','pano_banheiro','pano_quarto','pano_area','tirou_poeira','lavou_roupa','estendeu_roupa','tirou_do_varal','guardou_roupa','tarefas_cafe_manha','tarefas_almoco','tarefas_lanche','tarefas_jantar','fez_pao'],
+      'intimidade': ['tipo_parceiro','genero_parceiro','orientacao_sexual','houve_intimidade','houve_masturbacao','foi_em_grupo','satisfacao_intimidade','conexao_emocional','qualidade_masturbacao'],
+    };
+    const camposValidos = camposValidosPorSecao[type] || [];
     Object.keys(chipData).forEach(k => {
-
-      if (chipData[k] !== undefined) dados[k] = chipData[k];
-
+      if (chipData[k] !== undefined && (camposValidos.includes(k) || camposValidos.length === 0)) {
+        dados[k] = chipData[k];
+      }
     });
 
   
