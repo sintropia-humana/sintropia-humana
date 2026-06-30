@@ -56,7 +56,7 @@
 
   
 
-  \* { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   
 
@@ -3985,7 +3985,7 @@
 
   </div>
 
-  <p class="success-text" id="success-text">Registro salvo\!</p>
+  <p class="success-text" id="success-text">Registro salvo!</p>
 
   <p class="success-sub" id="success-id"></p>
 
@@ -4279,7 +4279,7 @@
 
     const list = document.getElementById('legend-list-' + key);
 
-    if (\!list || \!SCALE_MEANINGS[key]) return;
+    if (!list || !SCALE_MEANINGS[key]) return;
 
     if (list.children.length > 0) return;
 
@@ -4353,7 +4353,7 @@
 
     if (display) display.textContent = val;
 
-    const pct = (val / 10) \* 100;
+    const pct = (val / 10) * 100;
 
     input.style.setProperty('--val', pct + '%');
 
@@ -4373,7 +4373,7 @@
 
   document.querySelectorAll('input[type="range"]').forEach(r => {
 
-    const pct = (r.value / 10) \* 100;
+    const pct = (r.value / 10) * 100;
 
     r.style.setProperty('--val', pct + '%');
 
@@ -4383,7 +4383,7 @@
 
   function selectChip(el, key, multi, value) {
 
-    if (\!multi) {
+    if (!multi) {
 
       const parent = el.parentElement;
 
@@ -4605,7 +4605,7 @@
 
       const el = document.getElementById(id);
 
-      if (\!el) return;
+      if (!el) return;
 
       const v = el.type === 'number' ? (el.value ? parseFloat(el.value) : null)
 
@@ -4667,7 +4667,7 @@
 
     Object.keys(chipData).forEach(k => {
 
-      if (chipData[k] \!== undefined) dados[k] = chipData[k];
+      if (chipData[k] !== undefined) dados[k] = chipData[k];
 
     });
 
@@ -4755,7 +4755,7 @@
 
         const id = result.dados ? result.dados.id : '—';
 
-        document.getElementById('success-text').textContent = label + ' salvo\!';
+        document.getElementById('success-text').textContent = label + ' salvo!';
 
         document.getElementById('success-id').textContent = id + ' · ' + dateStr + ' · ' + timeStr;
 
@@ -4831,7 +4831,7 @@
 
     const select = document.getElementById('nome_projeto');
 
-    if (\!select) return;
+    if (!select) return;
 
     const projetos = getProjetos();
 
@@ -4867,7 +4867,7 @@
 
   function onSelectProjeto(nome) {
 
-    if (\!nome) {
+    if (!nome) {
 
       document.getElementById('id-projeto-display').style.display = 'none';
 
@@ -4879,7 +4879,7 @@
 
     const opt = [...select.options].find(o => o.value === nome);
 
-    if (\!opt) return;
+    if (!opt) return;
 
     preencherChip('tipo_projeto', opt.dataset.tipo);
 
@@ -4913,9 +4913,9 @@
 
   function preencherChip(grupo, valor) {
 
-    if (\!valor) return;
+    if (!valor) return;
 
-    document.querySelectorAll('[onclick\*="' + grupo + '"]').forEach(chip => {
+    document.querySelectorAll('[onclick*="' + grupo + '"]').forEach(chip => {
 
       chip.classList.remove('selected');
 
@@ -4964,7 +4964,7 @@
 
     const projetos = getProjetos();
 
-    if (\!projetos.find(p => p.nome === 'Du-To Creative Studio')) {
+    if (!projetos.find(p => p.nome === 'Du-To Creative Studio')) {
 
       projetos.push({ nome: 'Du-To Creative Studio', id: 'PRJ-001', tipo: 'misto', modelo: 'pro_bono', fase: 'discovery', contrato: 'em_negociacao' });
 
