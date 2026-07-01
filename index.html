@@ -3253,6 +3253,12 @@
 
           <span class="chip" onclick="toggleChipMulti(this,'contexto_musica','social')">Social</span>
 
+          <span class="chip" onclick="toggleChipMulti(this,'contexto_musica','estudo')">Estudo</span>
+
+          <span class="chip" onclick="toggleChipMulti(this,'contexto_musica','lazer')">Lazer</span>
+
+          <span class="chip" onclick="toggleChipMulti(this,'contexto_musica','tarefas_domesticas')">Tarefas domésticas</span>
+
         </div>
 
       </div>
@@ -4145,7 +4151,10 @@
 
 <script>
 
-  const chipData = {};
+  const chipData = {
+    idioma: 'ingles',   // default pré-selecionado no HTML
+    fase: 'basico',     // default pré-selecionado no HTML
+  };
 
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxUDgiWQnZt3f0HbT8EXvp_8g0sNzD65EZ3QZ-8NefzEWIs6YOXFAQ1vnpqS11i49Lavw/exec';
 
@@ -4568,8 +4577,8 @@
     // nivel_percebido, consistencia_streak, vocabulario_novo, dificuldade, observacoes,
     // horario_execucao (TEM, confirmado)
     if (type === 'idiomas') return { ...base,
-      horario_execucao: v('horario_idioma'), idioma: chip('idioma'),
-      pilar: chip('pilar'), fase: chip('fase'), atividade: multiChip('atividade_idioma'),
+      horario_execucao: v('horario_idioma'), idioma: chip('idioma') || 'ingles',
+      pilar: chip('pilar') || 'listening', fase: chip('fase') || 'basico', atividade: multiChip('atividade_idioma'),
       minutos_pratica: (v('minutos_pratica') !== null ? v('minutos_pratica') : 0), vocabulario_novo: v('vocabulario_novo'),
       nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
     };
