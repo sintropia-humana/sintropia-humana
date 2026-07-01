@@ -3514,144 +3514,91 @@
 <!-- FINANCEIRO -->
 
 <div class="screen" id="screen-financeiro">
-
   <p class="section-title">Finanças</p>
 
+  <!-- Card resumo mensal da planilha -->
+  <div class="card" style="background:linear-gradient(135deg,var(--verde),#1A4A3F);color:white;margin-bottom:0.75rem">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+      <div style="font-size:11px;opacity:0.7;text-transform:uppercase;letter-spacing:1px" id="fin-mes-label">Carregando...</div>
+      <button onclick="carregarFinancas()" style="background:rgba(255,255,255,0.15);border:none;border-radius:20px;color:white;font-size:11px;padding:4px 10px;cursor:pointer">↻ Atualizar</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;text-align:center">
+      <div>
+        <div style="font-size:10px;opacity:0.65;margin-bottom:4px">Entradas</div>
+        <div style="font-size:18px;font-weight:500;color:#86efac" id="fin-entradas">—</div>
+      </div>
+      <div>
+        <div style="font-size:10px;opacity:0.65;margin-bottom:4px">Saídas</div>
+        <div style="font-size:18px;font-weight:500;color:#fca5a5" id="fin-saidas">—</div>
+      </div>
+      <div>
+        <div style="font-size:10px;opacity:0.65;margin-bottom:4px">Saldo</div>
+        <div style="font-size:18px;font-weight:500" id="fin-saldo">—</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;opacity:0.55;text-align:center" id="fin-status">Dados da planilha compartilhada</div>
+  </div>
+
+  <!-- Formulário de sentimento (mantido para registro_financeiro no BigQuery) -->
   <div class="card">
-
     <div class="field">
-
-      <label>Entrada do dia <span class="label-hint">R$</span></label>
-
-      <input type="number" min="0" step="0.01" placeholder="0,00" id="entrada_fin">
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
       <label>Categoria da entrada</label>
-
       <div class="chips">
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'salario')">Salário</span>
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'freelance')">Freelance</span>
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'consultoria')">Consultoria</span>
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'investimento')">Investimento</span>
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'bonus')">Bônus</span>
-
         <span class="chip" onclick="selectChip(this,'cat_entrada',0,'outro')">Outro</span>
-
       </div>
-
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
-
-      <label>Saída do dia <span class="label-hint">R$</span></label>
-
-      <input type="number" min="0" step="0.01" placeholder="0,00" id="saida_fin">
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
       <label>Categoria da saída</label>
-
       <div class="chips">
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'moradia')">Moradia</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'alimentacao')">Alimentação</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'saude')">Saúde</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'transporte')">Transporte</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'educacao')">Educação</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'lazer')">Lazer</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'vestuario')">Vestuário</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'assinatura')">Assinatura</span>
-
         <span class="chip" onclick="selectChip(this,'cat_saida',0,'outro')">Outro</span>
-
       </div>
-
     </div>
-
     <div class="divider"></div>
-
     <div class="toggle-row">
-
       <label style="margin:0">Teve gasto supérfluo?</label>
-
       <label class="toggle"><input type="checkbox" id="gastou_suprafluo" onchange="toggleSuprafluo(this)"><span class="toggle-slider"></span></label>
-
     </div>
-
     <div id="suprafluo-campos" style="display:none;margin-top:10px">
-
       <input type="text" placeholder="O que foi?" id="descricao_suprafluo">
-
     </div>
-
   </div>
 
   <div class="card">
-
     <div class="field">
-
       <label>Satisfação financeira <span class="scale-value" id="val-satisfacao_financeira">5</span></label>
-
       <div class="scale-container">
-
         <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'satisfacao_financeira')" id="satisfacao_financeira">
-
         <div class="scale-labels"><span>Crise</span><span>Pleno controle</span></div>
-
         <span class="scale-meaning" id="meaning-satisfacao_financeira">5 — Neutro</span>
-
       </div>
-
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
-
       <label>Ansiedade financeira <span class="scale-value" id="val-ansiedade_financeira">5</span></label>
-
       <div class="scale-container">
-
         <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'ansiedade_financeira')" id="ansiedade_financeira">
-
         <div class="scale-labels"><span>Nenhuma</span><span>Crise</span></div>
-
         <span class="scale-meaning" id="meaning-ansiedade_financeira">5 — Moderada</span>
-
       </div>
-
     </div>
-
   </div>
 
   <button class="submit-btn" onclick="submitForm('financeiro')">Salvar registro financeiro</button>
-
 </div>
-
-  
 
 <!-- PROPÓSITO -->
 
@@ -4156,9 +4103,45 @@
     fase: 'basico',     // default pré-selecionado no HTML
   };
 
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxUDgiWQnZt3f0HbT8EXvp_8g0sNzD65EZ3QZ-8NefzEWIs6YOXFAQ1vnpqS11i49Lavw/exec';
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz0Kf70n-EiqZn9Ocxz0-s8o_R8cuMww0CSxWGLdvGk_IBYZ5PrODR6gse2KWi2dGDAzg/exec';
 
   
+
+
+  // ── FINANÇAS: lê totais mensais da planilha via Apps Script ─────────────────
+  const SHEET_ID = '1pQebxsw6mLWYvqxRzFEoP4vFB2UlRmVKWDDahNAXQQQ';
+
+  async function carregarFinancas() {
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const now = new Date();
+    const mesIdx = now.getMonth();
+    const ano = now.getFullYear();
+    const nomeMes = meses[mesIdx].charAt(0).toUpperCase() + meses[mesIdx].slice(1);
+
+    document.getElementById('fin-mes-label').textContent = nomeMes + ' ' + ano;
+    document.getElementById('fin-status').textContent = 'Buscando dados...';
+
+    try {
+      const url = WEB_APP_URL + '?action=getFinancas&sheetId=' + SHEET_ID + '&mes=' + (mesIdx + 1) + '&ano=' + ano;
+      const resp = await fetch(url);
+      const data = await resp.json();
+
+      if (data.status === 200) {
+        const fmt = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+        document.getElementById('fin-entradas').textContent = fmt(data.entradas || 0);
+        document.getElementById('fin-saidas').textContent = fmt(data.saidas || 0);
+        const saldo = (data.entradas || 0) - (data.saidas || 0);
+        const elSaldo = document.getElementById('fin-saldo');
+        elSaldo.textContent = fmt(saldo);
+        elSaldo.style.color = saldo >= 0 ? '#86efac' : '#fca5a5';
+        document.getElementById('fin-status').textContent = 'Planilha atualizada · ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      } else {
+        document.getElementById('fin-status').textContent = 'Erro ao carregar dados';
+      }
+    } catch(e) {
+      document.getElementById('fin-status').textContent = 'Sem conexão com a planilha';
+    }
+  }
 
   function setDate() {
 
