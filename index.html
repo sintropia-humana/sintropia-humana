@@ -4122,7 +4122,7 @@
     document.getElementById('fin-status').textContent = 'Buscando dados...';
 
     try {
-      const url = WEB_APP_URL + '?action=getFinancas&sheetId=' + SHEET_ID + '&mes=' + (mesIdx + 1) + '&ano=' + ano;
+      const url = WEB_APP_URL + '?action=getFinancas&sheetId=' + SHEET_ID + '&mes=' + (mesIdx + 1) + '&ano=' + ano + '&dia=' + now.getDate();
       const resp = await fetch(url);
       const data = await resp.json();
 
