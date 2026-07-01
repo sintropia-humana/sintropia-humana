@@ -4713,6 +4713,14 @@
 
     const dados = coletarDados(type);
 
+    // Remove campos com valor null/undefined/'' — BigQuery trata ausência como NULL
+    // e isso evita erro "Field value cannot be empty" em colunas REQUIRED
+    Object.keys(dados).forEach(k => {
+      if (dados[k] === null || dados[k] === undefined || dados[k] === '') {
+        delete dados[k];
+      }
+    });
+
   
 
     // Mostra overlay de loading
