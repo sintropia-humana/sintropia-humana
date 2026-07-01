@@ -4586,7 +4586,11 @@
     if (type === 'consultoria') {
       const chips = document.querySelectorAll('#competencias-chips .chip.selected');
       const competencias = Array.from(chips).map(c => c.textContent.trim()).join(', ');
+      const selProj = document.getElementById('nome_projeto');
+      const optSel = selProj ? selProj.options[selProj.selectedIndex] : null;
+      const idProjeto = (optSel && optSel.dataset.idprojeto) ? optSel.dataset.idprojeto : null;
       return { ...base,
+        id_projeto: idProjeto,
         horario_execucao: v('horario_consult'), nome_projeto: v('nome_projeto'),
         tipo_projeto: chip('tipo_projeto'), modelo_comercial: chip('modelo_comercial'),
         contrato_status: chip('contrato_status'), fase_atual: chip('fase_atual'),
@@ -4717,6 +4721,19 @@
     const tabela = TABELAS[type];
 
   
+
+    // Validação: consultoria exige projeto selecionado
+    if (type === 'consultoria') {
+      const selProj = document.getElementById('nome_projeto');
+      const optSel = selProj ? selProj.options[selProj.selectedIndex] : null;
+      const idProj = (optSel && optSel.dataset.idprojeto) ? optSel.dataset.idprojeto : null;
+      if (!idProj) {
+        document.getElementById('success-text').textContent = 'Selecione um projeto';
+        document.getElementById('success-id').textContent = 'É obrigatório escolher um projeto antes de salvar';
+        document.getElementById('success-overlay').classList.add('show');
+        return;
+      }
+    }
 
     // Coleta dados do formulário
 
@@ -4855,6 +4872,8 @@
       opt.value = p.nome;
 
       opt.textContent = p.nome + (p.id ? ' · ' + p.id : '');
+
+      opt.dataset.idprojeto = p.id || '';
 
       opt.dataset.tipo = p.tipo || '';
 
