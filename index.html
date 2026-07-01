@@ -4103,7 +4103,7 @@
     fase: 'basico',     // default pré-selecionado no HTML
   };
 
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz0Kf70n-EiqZn9Ocxz0-s8o_R8cuMww0CSxWGLdvGk_IBYZ5PrODR6gse2KWi2dGDAzg/exec';
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxExjEcKchD8vfp6s2X4Y2RJ0Qyp3n0JesB7eJeDfIyk-3dY_v8Eh3DTSIPLBoKpFYew/exec';
 
   
 
@@ -4118,7 +4118,7 @@
     const ano = now.getFullYear();
     const nomeMes = meses[mesIdx].charAt(0).toUpperCase() + meses[mesIdx].slice(1);
 
-    document.getElementById('fin-mes-label').textContent = nomeMes + ' ' + ano;
+    document.getElementById('fin-mes-label').textContent = 'JAN – ' + nomeMes.toUpperCase() + ' ' + ano + '  ·  ACUMULADO';
     document.getElementById('fin-status').textContent = 'Buscando dados...';
 
     try {
@@ -4134,7 +4134,7 @@
         const elSaldo = document.getElementById('fin-saldo');
         elSaldo.textContent = fmt(saldo);
         elSaldo.style.color = saldo >= 0 ? '#86efac' : '#fca5a5';
-        document.getElementById('fin-status').textContent = 'Planilha atualizada · ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        document.getElementById('fin-status').textContent = 'Acumulado jan–' + nomeMes + ' · atualizado ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
       } else {
         document.getElementById('fin-status').textContent = 'Erro ao carregar dados';
       }
