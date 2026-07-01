@@ -2178,21 +2178,21 @@
 
       <div class="chips">
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'shadowing')">Shadowing</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','shadowing')">Shadowing</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'podcast')">Podcast</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','podcast')">Podcast</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'serie')">Série</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','serie')">Série</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'diario')">Diário</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','diario')">Diário</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'redacao')">Redação</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','redacao')">Redação</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'conversacao')">Conversação</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','conversacao')">Conversação</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'leitura')">Leitura</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','leitura')">Leitura</span>
 
-        <span class="chip" onclick="selectChip(this,'atividade_idioma',0,'musica')">Música</span>
+        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','musica')">Música</span>
 
       </div>
 
@@ -2679,11 +2679,11 @@
 
         <div class="chips">
 
-          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'menos')">Menos ð</span>
+          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'menos')">Menos</span>
 
           <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'igual')">Igual</span>
 
-          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'mais')">Mais ð</span>
+          <span class="chip" onclick="selectChip(this,'comparado_ontem',0,'mais')">Mais</span>
 
         </div>
 
@@ -2713,13 +2713,13 @@
 
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
 
-        <div class="toggle-row"><label style="margin:0">☕ Café da manhã</label><label class="toggle"><input type="checkbox" id="cafe_da_manha"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">Café da manhã</label><label class="toggle"><input type="checkbox" id="cafe_da_manha"><span class="toggle-slider"></span></label></div>
 
-        <div class="toggle-row"><label style="margin:0">ð½️ Almoço</label><label class="toggle"><input type="checkbox" id="almoco"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">Almoço</label><label class="toggle"><input type="checkbox" id="almoco"><span class="toggle-slider"></span></label></div>
 
-        <div class="toggle-row"><label style="margin:0">ð Lanche</label><label class="toggle"><input type="checkbox" id="lanche"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">Lanche</label><label class="toggle"><input type="checkbox" id="lanche"><span class="toggle-slider"></span></label></div>
 
-        <div class="toggle-row"><label style="margin:0">ð Jantar</label><label class="toggle"><input type="checkbox" id="jantar"><span class="toggle-slider"></span></label></div>
+        <div class="toggle-row"><label style="margin:0">Jantar</label><label class="toggle"><input type="checkbox" id="jantar"><span class="toggle-slider"></span></label></div>
 
       </div>
 
@@ -3849,7 +3849,7 @@
 
   <div class="card">
     <p style="font-weight:600;color:var(--verde);margin-bottom:12px">🍳 Cozinha</p>
-    <div class="toggle-row"><label style="margin:0">☕ Café da manhã</label><label class="toggle"><input type="checkbox" id="fez_cafe_manha"><span class="toggle-slider"></span></label></div>
+    <div class="toggle-row"><label style="margin:0">Café da manhã</label><label class="toggle"><input type="checkbox" id="fez_cafe_manha"><span class="toggle-slider"></span></label></div>
     <div class="toggle-row"><label style="margin:0">🍽️ Almoço</label><label class="toggle"><input type="checkbox" id="fez_almoco"><span class="toggle-slider"></span></label></div>
     <div class="toggle-row"><label style="margin:0">🍎 Lanche</label><label class="toggle"><input type="checkbox" id="fez_lanche"><span class="toggle-slider"></span></label></div>
     <div class="toggle-row"><label style="margin:0">🌙 Jantar</label><label class="toggle"><input type="checkbox" id="fez_jantar"><span class="toggle-slider"></span></label></div>
@@ -4569,8 +4569,8 @@
     // horario_execucao (TEM, confirmado)
     if (type === 'idiomas') return { ...base,
       horario_execucao: v('horario_idioma'), idioma: chip('idioma'),
-      pilar: chip('pilar'), fase: chip('fase'), atividade: chip('atividade_idioma'),
-      minutos_pratica: v('minutos_pratica'), vocabulario_novo: v('vocabulario_novo'),
+      pilar: chip('pilar'), fase: chip('fase'), atividade: multiChip('atividade_idioma'),
+      minutos_pratica: (v('minutos_pratica') !== null ? v('minutos_pratica') : 0), vocabulario_novo: v('vocabulario_novo'),
       nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
     };
 
@@ -4582,7 +4582,7 @@
         tipo_projeto: chip('tipo_projeto'), modelo_comercial: chip('modelo_comercial'),
         contrato_status: chip('contrato_status'), fase_atual: chip('fase_atual'),
         sprint_atual: v('sprint_atual'), horas_sprint: v('horas_sprint'),
-        competencias_desenvolvidas: competencias,
+        competencias: competencias,
         nivel_energia: v('nivel_energia_consult'), satisfacao: v('satisfacao_consult'),
         aprendizado_sprint: v('aprendizado_sprint'), bloqueio: v('bloqueio'),
         proximo_passo: v('proximo_passo'),
@@ -4627,7 +4627,7 @@
 
     if (type === 'musica') return { ...base,
       ouviu_musica: v('ouviu_musica'), genero_musical: multiChip('genero_musical'),
-      contexto_musica: multiChip('contexto_musica'), minutos_ouvindo: v('minutos_ouvindo'),
+      contexto: multiChip('contexto_musica'), minutos_ouvindo: v('minutos_ouvindo'),
       impacto_emocional: v('impacto_emocional_mus'), emocao_gerada: multiChip('emocao_gerada'),
       musica_ou_artista_marcante: v('musica_marcante'),
     };
