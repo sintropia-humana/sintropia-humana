@@ -4130,7 +4130,7 @@
         const fmt = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
         document.getElementById('fin-entradas').textContent = fmt(data.entradas || 0);
         document.getElementById('fin-saidas').textContent = fmt(data.saidas || 0);
-        const saldo = (data.entradas || 0) - (data.saidas || 0);
+        const saldo = data.saldo !== null && data.saldo !== undefined ? data.saldo : (data.entradas || 0) - (data.saidas || 0);
         const elSaldo = document.getElementById('fin-saldo');
         elSaldo.textContent = fmt(saldo);
         elSaldo.style.color = saldo >= 0 ? '#86efac' : '#fca5a5';
