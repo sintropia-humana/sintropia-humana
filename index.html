@@ -1258,48 +1258,49 @@
 
 <div class="screen active" id="screen-home">
 
-  <div class="ish-card">
+  <div class="ish-card" id="ish-card">
 
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-
+    <!-- Linha topo: ISH + data + botão atualizar -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
       <div>
-
-        <div style="font-size:11px;opacity:0.7;text-transform:uppercase;letter-spacing:1px">Índice de Sintropia</div>
-
-        <div class="ish-number" id="ish-numero">—</div>
-
-        <div class="ish-state" id="ish-estado">Preencha o registro do dia</div>
-
+        <div style="font-size:10px;opacity:0.6;text-transform:uppercase;letter-spacing:1px">Índice de Sintropia Humana</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px">
+          <div class="ish-number" id="ish-numero">—</div>
+          <div style="font-size:13px;opacity:0.7">/10</div>
+        </div>
+        <div class="ish-state" id="ish-estado" style="margin-top:4px">Carregando...</div>
       </div>
-
       <div style="text-align:right">
-
-        <div style="font-size:11px;opacity:0.7">Hoje</div>
-
+        <div style="font-size:10px;opacity:0.6">Hoje</div>
         <div id="ish-data" style="font-size:12px;margin-top:2px;opacity:0.9"></div>
-
+        <button onclick="carregarISH()" style="margin-top:6px;background:rgba(255,255,255,0.15);border:none;border-radius:20px;color:white;font-size:10px;padding:3px 8px;cursor:pointer">↻</button>
       </div>
-
     </div>
 
-    <div style="margin-top:12px;display:flex;gap:16px">
+    <!-- Barras das 8 dimensões -->
+    <div id="ish-dimensoes" style="margin-top:12px;display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px">
+        <div id="dim-vitalidade"></div>
+        <div id="dim-emocional"></div>
+        <div id="dim-proposito"></div>
+        <div id="dim-habitos"></div>
+        <div id="dim-conexao"></div>
+        <div id="dim-realizacao"></div>
+        <div id="dim-abundancia"></div>
+        <div id="dim-expressao"></div>
+      </div>
+    </div>
 
+    <!-- Mais forte / Mais fraca -->
+    <div style="margin-top:10px;display:flex;gap:16px">
       <div>
-
-        <div style="font-size:10px;opacity:0.6">Mais forte</div>
-
+        <div style="font-size:10px;opacity:0.6">↑ Mais forte</div>
         <div style="font-size:12px;font-weight:500" id="ish-forte">—</div>
-
       </div>
-
       <div>
-
-        <div style="font-size:10px;opacity:0.6">Atenção</div>
-
+        <div style="font-size:10px;opacity:0.6">↓ Atenção</div>
         <div style="font-size:12px;font-weight:500" id="ish-fraca">—</div>
-
       </div>
-
     </div>
 
   </div>
@@ -4107,6 +4108,78 @@
 
   
 
+
+  // ── ISH: lê Índice de Sintropia Humana do dia via Apps Script ───────────────
+
+  const DIMS = [
+    { id: 'vitalidade',  label: 'Vitalidade',   peso: 20 },
+    { id: 'emocional',   label: 'Emocional',    peso: 20 },
+    { id: 'proposito',   label: 'Propósito',    peso: 20 },
+    { id: 'habitos',     label: 'Hábitos',      peso: 10 },
+    { id: 'conexao',     label: 'Conexão',      peso: 10 },
+    { id: 'realizacao',  label: 'Realização',   peso: 10 },
+    { id: 'abundancia',  label: 'Abundância',   peso:  5 },
+    { id: 'expressao',   label: 'Expressão',    peso:  5 },
+  ];
+
+  function dimColor(v) {
+    if (v >= 7.5) return '#86efac';  // verde claro
+    if (v >= 5)   return '#fde68a';  // amarelo
+    return '#fca5a5';                // vermelho
+  }
+
+  function renderDim(id, label, valor, peso) {
+    const el = document.getElementById('dim-' + id);
+    if (!el) return;
+    const pct = (valor / 10 * 100).toFixed(0);
+    const cor = dimColor(valor);
+    el.innerHTML =
+      '<div style="font-size:10px;opacity:0.7;margin-bottom:2px">' + label + ' <span style="opacity:0.5">(' + peso + '%)</span></div>' +
+      '<div style="background:rgba(255,255,255,0.15);border-radius:4px;height:6px;width:100%">' +
+        '<div style="background:' + cor + ';height:6px;border-radius:4px;width:' + pct + '%"></div>' +
+      '</div>' +
+      '<div style="font-size:10px;color:' + cor + ';margin-top:1px">' + valor.toFixed(1) + '</div>';
+  }
+
+  async function carregarISH() {
+    const now  = new Date();
+    const data = now.toISOString().slice(0,10);
+    if (document.getElementById('ish-data'))
+      document.getElementById('ish-data').textContent =
+        now.toLocaleDateString('pt-BR', {day:'numeric', month:'short'});
+
+    try {
+      const url = WEB_APP_URL + '?action=getISH&data=' + data;
+      const resp = await fetch(url);
+      const d    = await resp.json();
+
+      if (d.status === 200 && d.ish !== null) {
+        document.getElementById('ish-numero').textContent  = d.ish.toFixed(2);
+        document.getElementById('ish-estado').textContent  = d.estado || '';
+        document.getElementById('ish-forte').textContent   = d.dimensao_mais_forte || '—';
+        document.getElementById('ish-fraca').textContent   = d.dimensao_mais_fraca || '—';
+
+        // Renderizar barras das dimensões
+        DIMS.forEach(dim => renderDim(dim.id, dim.label, d['dim_' + dim.id] || 0, dim.peso));
+        const dimEl = document.getElementById('ish-dimensoes');
+        if (dimEl) dimEl.style.display = 'block';
+
+        // Cor do card conforme estado
+        const card = document.getElementById('ish-card');
+        if (card) {
+          const ish = d.ish;
+          const bg  = ish >= 7 ? 'linear-gradient(135deg,#1a5c3a,#0f3d26)'
+                    : ish >= 5 ? 'linear-gradient(135deg,var(--verde),#1A4A3F)'
+                    : 'linear-gradient(135deg,#7c2d12,#4a1a0a)';
+          card.style.background = bg;
+        }
+      } else {
+        document.getElementById('ish-estado').textContent = d.mensagem || 'Sem dados para hoje';
+      }
+    } catch(err) {
+      document.getElementById('ish-estado').textContent = 'Erro ao carregar ISH';
+    }
+  }
 
   // ── FINANÇAS: lê totais mensais da planilha via Apps Script ─────────────────
   const SHEET_ID = '1pQebxsw6mLWYvqxRzFEoP4vFB2UlRmVKWDDahNAXQQQ';
