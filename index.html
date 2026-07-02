@@ -1291,6 +1291,17 @@
       </div>
     </div>
 
+    <!-- Histórico 7 dias -->
+    <div id="ish-historico-wrap" style="display:none;margin-top:14px;border-top:1px solid rgba(255,255,255,0.12);padding-top:14px">
+      <div style="font-size:10px;opacity:0.55;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">ISH — últimos 7 dias</div>
+      <div id="ish-historico" style="display:none;gap:6px;align-items:flex-end"></div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <div style="display:flex;align-items:center;gap:4px;font-size:9px;opacity:0.6"><div style="width:8px;height:8px;border-radius:2px;background:#86efac"></div>&#8805;7.5</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:9px;opacity:0.6"><div style="width:8px;height:8px;border-radius:2px;background:#fde68a"></div>5&#8211;7.4</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:9px;opacity:0.6"><div style="width:8px;height:8px;border-radius:2px;background:#fca5a5"></div>&#60;5</div>
+      </div>
+    </div>
+
     <!-- Mais forte / Mais fraca -->
     <div style="margin-top:10px;display:flex;gap:16px">
       <div>
@@ -4104,7 +4115,7 @@
     fase: 'basico',     // default pré-selecionado no HTML
   };
 
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyvq3lww2KfSKzDs5qwhthdH68qfaTA2d5JKaYtwrLoSMNtdW3zocGvh9W6wPsXoRQlzw/exec';
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwNkDr8b4NQmXtbTujtG_nHDkL-zZUDaSIwoT65XAlyTH8VMFK0HzAVqOW7cOowQO4mYg/exec';
 
   
 
@@ -4143,42 +4154,115 @@
 
   async function carregarISH() {
     const now  = new Date();
-    const data = now.toISOString().slice(0,10);
+    const data = now.toLocaleDateString('pt-BR', {timeZone:'America/Sao_Paulo',
+      year:'numeric', month:'2-digit', day:'2-digit'})
+      .split('/').reverse().join('-');
+
     if (document.getElementById('ish-data'))
       document.getElementById('ish-data').textContent =
-        now.toLocaleDateString('pt-BR', {day:'numeric', month:'short'});
+        now.toLocaleDateString('pt-BR', {timeZone:'America/Sao_Paulo', day:'numeric', month:'short'});
 
     try {
       const url = WEB_APP_URL + '?action=getISH&data=' + data;
       const resp = await fetch(url);
       const d    = await resp.json();
 
-      if (d.status === 200 && d.ish !== null) {
-        document.getElementById('ish-numero').textContent  = d.ish.toFixed(2);
-        document.getElementById('ish-estado').textContent  = d.estado || '';
-        document.getElementById('ish-forte').textContent   = d.dimensao_mais_forte || '—';
-        document.getElementById('ish-fraca').textContent   = d.dimensao_mais_fraca || '—';
+      if (d.status === 200 && d.hoje) {
+        const h = d.hoje;
 
-        // Renderizar barras das dimensões
-        DIMS.forEach(dim => renderDim(dim.id, dim.label, d['dim_' + dim.id] || 0, dim.peso));
+        // ISH do dia
+        document.getElementById('ish-numero').textContent  = h.ish.toFixed(2);
+        document.getElementById('ish-estado').textContent  = h.estado_sintropia || '';
+        document.getElementById('ish-forte').textContent   = h.dimensao_mais_forte || '—';
+        document.getElementById('ish-fraca').textContent   = h.dimensao_mais_fraca || '—';
+        document.getElementById('ish-fraca').style.color   = '#fca5a5';
+
+        // Barras das dimensões de hoje
+        DIMS.forEach(dim => renderDim(dim.id, dim.label, h['dim_' + dim.id] || 0, dim.peso));
         const dimEl = document.getElementById('ish-dimensoes');
         if (dimEl) dimEl.style.display = 'block';
+        const histWrap = document.getElementById('ish-historico-wrap');
+        if (histWrap) histWrap.style.display = 'block';
 
-        // Cor do card conforme estado
+        // Cor do card
         const card = document.getElementById('ish-card');
         if (card) {
-          const ish = d.ish;
-          const bg  = ish >= 7 ? 'linear-gradient(135deg,#1a5c3a,#0f3d26)'
-                    : ish >= 5 ? 'linear-gradient(135deg,var(--verde),#1A4A3F)'
-                    : 'linear-gradient(135deg,#7c2d12,#4a1a0a)';
+          const bg = h.ish >= 7.5 ? 'linear-gradient(135deg,#1a5c3a,#0f3d26)'
+                   : h.ish >= 5   ? 'linear-gradient(135deg,var(--verde),#1A4A3F)'
+                   : 'linear-gradient(135deg,#7c2d12,#4a1a0a)';
           card.style.background = bg;
         }
+
+        // Histórico 7 dias
+        renderHistorico(d.historico, data);
+
       } else {
         document.getElementById('ish-estado').textContent = d.mensagem || 'Sem dados para hoje';
       }
     } catch(err) {
       document.getElementById('ish-estado').textContent = 'Erro ao carregar ISH';
     }
+  }
+
+  function renderHistorico(historico, dataHoje) {
+    const container = document.getElementById('ish-historico');
+    if (!container) return;
+
+    const dias = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      dias.push(d.toLocaleDateString('pt-BR', {timeZone:'America/Sao_Paulo',
+        year:'numeric', month:'2-digit', day:'2-digit'})
+        .split('/').reverse().join('-'));
+    }
+
+    const porData = {};
+    historico.forEach(function(row) { porData[row.data_registro] = row; });
+
+    const barMaxH = 44;
+    const parts = [];
+
+    dias.forEach(function(data) {
+      const row  = porData[data];
+      const hoje = data === dataHoje;
+      const dStr = data.slice(8, 10) + '/' + data.slice(5, 7);
+
+      const label = hoje ? 'hoje' : dStr;
+      const labelStyle = hoje ? 'font-size:9px;font-weight:500' : 'font-size:9px;opacity:0.45';
+
+      if (!row) {
+        parts.push(
+          '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">' +
+          '<div style="font-size:9px;opacity:0.35;height:13px">—</div>' +
+          '<div style="display:flex;align-items:flex-end;height:' + barMaxH + 'px">' +
+          '<div style="background:rgba(255,255,255,0.1);border-radius:3px;min-width:24px;width:100%;height:4px;border:1px dashed rgba(255,255,255,0.2)"></div>' +
+          '</div>' +
+          '<div style="' + labelStyle + '">' + label + '</div>' +
+          '</div>'
+        );
+        return;
+      }
+
+      const ish  = row.ish;
+      const h    = Math.max(6, Math.round((ish / 10) * barMaxH));
+      const cor  = ish >= 7.5 ? '#86efac' : ish >= 5 ? '#fde68a' : '#fca5a5';
+      const borda = hoje ? 'border:2px solid white;' : '';
+      const valStyle = hoje ? 'font-size:9px;height:13px;font-weight:500' : 'font-size:9px;opacity:0.6;height:13px';
+
+      parts.push(
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">' +
+        '<div style="' + valStyle + '">' + ish.toFixed(1) + '</div>' +
+        '<div style="display:flex;align-items:flex-end;height:' + barMaxH + 'px">' +
+        '<div style="background:' + cor + ';' + borda + 'border-radius:3px;min-width:24px;width:100%;height:' + h + 'px"></div>' +
+        '</div>' +
+        '<div style="' + labelStyle + '">' + label + '</div>' +
+        '</div>'
+      );
+    });
+
+    container.innerHTML = parts.join('');
+    container.style.display = 'flex';
   }
 
   // ── FINANÇAS: lê totais mensais da planilha via Apps Script ─────────────────
