@@ -4810,9 +4810,9 @@
     };
 
     if (type === 'proposito') return { ...base,
-      descricao_proposito: v('descricao_proposito'), data_alcance: v('data_alcance'),
+      descricao_proposito: v('descricao_proposito'), data_alcance_desejada: v('data_alcance'),
       indicadores_alcance: v('indicadores_alcance'),
-      alinhamento_declarado: v('alinhamento_declarado'),
+      alinhamento_declarado: v('alinhamento_declarado') !== null ? parseInt(v('alinhamento_declarado')) : null,
       observacoes: v('obs_proposito'),
     };
 
