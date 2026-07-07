@@ -4115,7 +4115,7 @@
     fase: 'basico',     // default pré-selecionado no HTML
   };
 
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwNkDr8b4NQmXtbTujtG_nHDkL-zZUDaSIwoT65XAlyTH8VMFK0HzAVqOW7cOowQO4mYg/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwfnRXxXeJs8uIAHK8I2TZjeL3mGap0u8MYYhkUL_Hm4jcOSSKsm8fawaTg0rSYOOdYKw/exec';
 
   
 
@@ -4809,7 +4809,8 @@
       ansiedade_financeira: v('ansiedade_financeira'),
     };
 
-    if (type === 'proposito') return { ...base,
+    if (type === 'proposito') return {
+      data_declaracao: date,
       descricao_proposito: v('descricao_proposito'), data_alcance_desejada: v('data_alcance'),
       indicadores_alcance: v('indicadores_alcance'),
       alinhamento_declarado: v('alinhamento_declarado') !== null ? parseInt(v('alinhamento_declarado')) : null,
