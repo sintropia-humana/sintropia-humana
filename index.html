@@ -1221,7 +1221,26 @@
     margin: 1rem 0;
 
   }
-
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--verde);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.25s;
+  z-index: 300;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 90vw;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 
 </head>
@@ -3703,122 +3722,28 @@
   <p class="section-title">🏠 Tarefas Domésticas</p>
 
   <div class="card">
-    <div class="field">
-      <label>Horário de execução</label>
-      <input type="time" id="tarefas_horario_execucao">
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Toque em uma tarefa para registrar agora</p>
+    <div class="chips" style="flex-wrap:wrap;gap:8px">
+      <span class="chip" onclick="registrarEvento('limpeza','varrer',true,false,false)">🧹 Varrer</span>
+      <span class="chip" onclick="registrarEvento('limpeza','passar_pano',true,false,false)">🧽 Passar pano</span>
+      <span class="chip" onclick="registrarEvento('limpeza','tirar_poeira',true,false,false)">🪶 Tirar poeira</span>
+      <span class="chip" onclick="registrarEvento('cozinha','lavar_loucas',false,true,false)">🍽️ Lavar louça</span>
+      <span class="chip" onclick="registrarEvento('cozinha','fazer_cafe',false,false,false)">☕ Fazer café</span>
+      <span class="chip" onclick="registrarEvento('cozinha','fazer_almoco',false,false,false)">🍽️ Fazer almoço</span>
+      <span class="chip" onclick="registrarEvento('cozinha','fazer_lanche',false,false,false)">🍎 Fazer lanche</span>
+      <span class="chip" onclick="registrarEvento('cozinha','fazer_jantar',false,false,false)">🌙 Fazer jantar</span>
+      <span class="chip" onclick="registrarEvento('cozinha','fazer_pao',false,false,false)">🍞 Fazer pão</span>
+      <span class="chip" onclick="registrarEvento('roupa','lavar_roupa',false,false,false)">👕 Lavar roupa</span>
+      <span class="chip" onclick="registrarEvento('roupa','estender_roupa',false,false,false)">👕 Estender roupa</span>
+      <span class="chip" onclick="registrarEvento('roupa','tirar_do_varal',false,false,false)">👕 Tirar do varal</span>
+      <span class="chip" onclick="registrarEvento('roupa','guardar_roupa',false,false,false)">👕 Guardar roupa</span>
+      <span class="chip" onclick="registrarEvento('outro','outra',false,false,true)">✏️ Outra tarefa</span>
     </div>
   </div>
 
   <div class="card">
-    <p style="font-weight:600;color:var(--verde);margin-bottom:12px">🧹 Limpeza</p>
-    <div class="toggle-row">
-      <label style="margin:0">Fez faxina?</label>
-      <label class="toggle"><input type="checkbox" id="fez_faxina" onchange="toggleDiv(this,'bloco-faxina')"><span class="toggle-slider"></span></label>
-    </div>
-    <div id="bloco-faxina" style="display:none;margin-top:12px">
-      <div class="field">
-        <label>O que fez?</label>
-        <div class="chips">
-          <span class="chip" onclick="selectChip(this,'tipo_faxina',0,'varreu')">Varreu</span>
-          <span class="chip" onclick="selectChip(this,'tipo_faxina',0,'pano')">Passou pano</span>
-          <span class="chip" onclick="selectChip(this,'tipo_faxina',0,'ambos')">Os dois</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Onde varreu?</p>
-      <div class="toggle-row"><label style="margin:0">Sala</label><label class="toggle"><input type="checkbox" id="varreu_sala"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row"><label style="margin:0">Cozinha</label><label class="toggle"><input type="checkbox" id="varreu_cozinha"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row"><label style="margin:0">Área</label><label class="toggle"><input type="checkbox" id="varreu_area"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row">
-        <label style="margin:0">Banheiro(s)</label>
-        <label class="toggle"><input type="checkbox" id="varreu_banheiro" onchange="toggleDiv(this,'bloco-qtd-banheiro')"><span class="toggle-slider"></span></label>
-      </div>
-      <div id="bloco-qtd-banheiro" style="display:none;margin:8px 0 8px 16px">
-        <label style="font-size:13px">Quantos banheiros?</label>
-        <div class="chips">
-          <span class="chip" onclick="selectChip(this,'qtd_banheiros_varridos',0,1)">1</span>
-          <span class="chip" onclick="selectChip(this,'qtd_banheiros_varridos',0,2)">2</span>
-          <span class="chip" onclick="selectChip(this,'qtd_banheiros_varridos',0,3)">3+</span>
-        </div>
-      </div>
-      <div class="toggle-row">
-        <label style="margin:0">Quarto(s)</label>
-        <label class="toggle"><input type="checkbox" id="varreu_quarto" onchange="toggleDiv(this,'bloco-qtd-quarto')"><span class="toggle-slider"></span></label>
-      </div>
-      <div id="bloco-qtd-quarto" style="display:none;margin:8px 0 8px 16px">
-        <label style="font-size:13px">Quantos quartos?</label>
-        <div class="chips">
-          <span class="chip" onclick="selectChip(this,'qtd_quartos_varridos',0,1)">1</span>
-          <span class="chip" onclick="selectChip(this,'qtd_quartos_varridos',0,2)">2</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Onde passou pano?</p>
-      <div class="toggle-row"><label style="margin:0">Sala</label><label class="toggle"><input type="checkbox" id="pano_sala"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row"><label style="margin:0">Cozinha</label><label class="toggle"><input type="checkbox" id="pano_cozinha"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row"><label style="margin:0">Banheiro</label><label class="toggle"><input type="checkbox" id="pano_banheiro"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row"><label style="margin:0">Área</label><label class="toggle"><input type="checkbox" id="pano_area"><span class="toggle-slider"></span></label></div>
-      <div class="toggle-row">
-        <label style="margin:0">Quarto(s)</label>
-        <label class="toggle"><input type="checkbox" id="pano_quarto" onchange="toggleDiv(this,'bloco-pano-quartos')"><span class="toggle-slider"></span></label>
-      </div>
-      <div id="bloco-pano-quartos" style="display:none;margin:8px 0 8px 16px">
-        <label style="font-size:13px">Passou nos dois quartos?</label>
-        <div class="chips">
-          <span class="chip" onclick="selectChip(this,'pano_quarto_ambos',0,true)">Sim, nos dois</span>
-          <span class="chip" onclick="selectChip(this,'pano_quarto_ambos',0,false)">Só em um</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="toggle-row">
-        <label style="margin:0">Tirou poeira dos móveis?</label>
-        <label class="toggle"><input type="checkbox" id="tirou_poeira" onchange="toggleDiv(this,'bloco-poeira')"><span class="toggle-slider"></span></label>
-      </div>
-      <div id="bloco-poeira" style="display:none;margin-top:10px">
-        <label style="font-size:13px;margin-bottom:6px;display:block">Onde?</label>
-        <div class="chips" style="flex-wrap:wrap">
-          <span class="chip" onclick="toggleChipMulti(this,'locais_poeira','mesa')">Mesa</span>
-          <span class="chip" onclick="toggleChipMulti(this,'locais_poeira','estantes')">Estantes</span>
-          <span class="chip" onclick="toggleChipMulti(this,'locais_poeira','escrivaninha_maite')">Escrivaninha Maitê</span>
-          <span class="chip" onclick="toggleChipMulti(this,'locais_poeira','escrivaninha_casal')">Escrivaninha casal</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <p style="font-weight:600;color:var(--verde);margin-bottom:12px">👕 Roupa</p>
-    <div class="toggle-row">
-      <label style="margin:0">Lavou roupa?</label>
-      <label class="toggle"><input type="checkbox" id="lavou_roupa" onchange="toggleDiv(this,'bloco-roupa')"><span class="toggle-slider"></span></label>
-    </div>
-    <div id="bloco-roupa" style="display:none;margin-top:12px">
-      <div class="toggle-row">
-        <label style="margin:0">Estendeu?</label>
-        <label class="toggle"><input type="checkbox" id="estendeu_roupa" onchange="toggleDiv(this,'bloco-varal')"><span class="toggle-slider"></span></label>
-      </div>
-      <div id="bloco-varal" style="display:none;margin-top:8px">
-        <div class="toggle-row">
-          <label style="margin:0">Tirou do varal?</label>
-          <label class="toggle"><input type="checkbox" id="tirou_do_varal" onchange="toggleDiv(this,'bloco-guardou')"><span class="toggle-slider"></span></label>
-        </div>
-        <div id="bloco-guardou" style="display:none;margin-top:8px">
-          <div class="toggle-row">
-            <label style="margin:0">Já guardou?</label>
-            <label class="toggle"><input type="checkbox" id="guardou_roupa"><span class="toggle-slider"></span></label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <p style="font-weight:600;color:var(--verde);margin-bottom:12px">🍳 Cozinha</p>
-    <div class="toggle-row"><label style="margin:0">Café da manhã</label><label class="toggle"><input type="checkbox" id="fez_cafe_manha"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🍽️ Almoço</label><label class="toggle"><input type="checkbox" id="fez_almoco"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🍎 Lanche</label><label class="toggle"><input type="checkbox" id="fez_lanche"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🌙 Jantar</label><label class="toggle"><input type="checkbox" id="fez_jantar"><span class="toggle-slider"></span></label></div>
-    <div class="toggle-row"><label style="margin:0">🍞 Fez pão?</label><label class="toggle"><input type="checkbox" id="fez_pao"><span class="toggle-slider"></span></label></div>
+    <p class="section-title" style="margin-top:0">Registrado hoje</p>
+    <div id="eventos-hoje-lista" style="font-size:13px;color:var(--text-secondary)">Nenhum evento ainda hoje</div>
   </div>
 
   <div class="card">
@@ -3837,9 +3762,16 @@
     </div>
   </div>
 
-  <button class="submit-btn" onclick="submitForm('tarefas')">Salvar tarefas domésticas</button>
+  <button class="submit-btn" onclick="submitForm('tarefas')">Salvar satisfação do dia</button>
 </div>
 
+<!-- MODAL DE EVENTO (local/quantidade/detalhe) -->
+<div class="mais-overlay" id="evento-overlay" onclick="fecharEventoModal()"></div>
+<div class="mais-menu" id="evento-modal">
+  <p id="evento-modal-titulo" style="font-weight:600;color:var(--verde);margin-bottom:12px;text-align:center"></p>
+  <div id="evento-modal-corpo"></div>
+  <button class="submit-btn" onclick="confirmarEvento()">Confirmar</button>
+</div>
 <!-- INTIMIDADE -->
 <div class="screen" id="screen-intimidade">
   <p class="section-title">❤️ Intimidade</p>
@@ -4116,7 +4048,170 @@
   };
 
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5oB_e1sZtdo7i43DZ2plzaiPyQtjK7ZimW2Tqsc2Y--jiia_8qz1BCnTt8AIbJKj5xg/exec';
+// ── EVENTOS DE TAREFAS DOMÉSTICAS ────────────────────────────────────────────
 
+const LABELS_TAREFA = {
+  varrer: 'Varrer', passar_pano: 'Passar pano', tirar_poeira: 'Tirar poeira',
+  lavar_loucas: 'Lavar louça', fazer_cafe: 'Fazer café', fazer_almoco: 'Fazer almoço',
+  fazer_lanche: 'Fazer lanche', fazer_jantar: 'Fazer jantar', fazer_pao: 'Fazer pão',
+  lavar_roupa: 'Lavar roupa', estender_roupa: 'Estender roupa', tirar_do_varal: 'Tirar do varal',
+  guardar_roupa: 'Guardar roupa', outra: 'Outra tarefa'
+};
+
+const LOCAIS_TAREFA = ['sala', 'cozinha', 'banheiro', 'quarto', 'area'];
+
+let eventoPendente = null;
+let eventosHojeLocal = [];
+
+function registrarEvento(categoria, tarefa, pedeLocal, pedeQuantidade, pedeDetalhe) {
+  if (!pedeLocal && !pedeQuantidade && !pedeDetalhe) {
+    enviarEvento({ categoria, tarefa });
+    return;
+  }
+  eventoPendente = { categoria, tarefa, pedeLocal, pedeQuantidade, pedeDetalhe };
+  abrirEventoModal();
+}
+
+function abrirEventoModal() {
+  const titulo = document.getElementById('evento-modal-titulo');
+  const corpo = document.getElementById('evento-modal-corpo');
+  titulo.textContent = LABELS_TAREFA[eventoPendente.tarefa] || 'Registrar tarefa';
+  corpo.innerHTML = '';
+
+  if (eventoPendente.pedeLocal) {
+    const div = document.createElement('div');
+    div.className = 'chips';
+    div.style.cssText = 'margin-bottom:12px;justify-content:center';
+    LOCAIS_TAREFA.forEach(l => {
+      const span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = l.charAt(0).toUpperCase() + l.slice(1);
+      span.onclick = () => {
+        div.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        span.classList.add('selected');
+        eventoPendente.local = l;
+      };
+      div.appendChild(span);
+    });
+    corpo.appendChild(div);
+  }
+
+  if (eventoPendente.pedeQuantidade) {
+    const div = document.createElement('div');
+    div.className = 'chips';
+    div.style.cssText = 'margin-bottom:12px;justify-content:center';
+    [1, 2, 3, 4].forEach(n => {
+      const span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = n === 4 ? '4+' : String(n);
+      span.onclick = () => {
+        div.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        span.classList.add('selected');
+        eventoPendente.quantidade = n;
+      };
+      div.appendChild(span);
+    });
+    corpo.appendChild(div);
+  }
+
+  if (eventoPendente.pedeDetalhe) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Qual tarefa?';
+    input.id = 'evento-detalhe-input';
+    input.style.width = '100%';
+    corpo.appendChild(input);
+  }
+
+  document.getElementById('evento-overlay').classList.add('open');
+  document.getElementById('evento-modal').classList.add('open');
+}
+
+function fecharEventoModal() {
+  document.getElementById('evento-overlay').classList.remove('open');
+  document.getElementById('evento-modal').classList.remove('open');
+  eventoPendente = null;
+}
+
+function confirmarEvento() {
+  if (!eventoPendente) return;
+  if (eventoPendente.pedeDetalhe) {
+    const input = document.getElementById('evento-detalhe-input');
+    eventoPendente.detalhe = input ? input.value : null;
+  }
+  enviarEvento(eventoPendente);
+  fecharEventoModal();
+}
+
+async function enviarEvento(evento) {
+  const now = new Date();
+  const dados = {
+    data_registro: now.toISOString().slice(0, 10),
+    horario_execucao: now.toTimeString().slice(0, 8),
+    categoria: evento.categoria,
+    tarefa: evento.tarefa,
+    local: evento.local || null,
+    quantidade: evento.quantidade || null,
+    detalhe: evento.detalhe || null,
+  };
+  Object.keys(dados).forEach(k => {
+    if (dados[k] === null || dados[k] === undefined || dados[k] === '') delete dados[k];
+  });
+
+  mostrarToast('Salvando ' + (LABELS_TAREFA[evento.tarefa] || evento.tarefa) + '...');
+
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      body: JSON.stringify({ tabela: 'registro_tarefas_evento', dados }),
+      headers: { 'Content-Type': 'text/plain' }
+    });
+    const result = await response.json();
+
+    if (result.status === 200) {
+      mostrarToast('✓ ' + (LABELS_TAREFA[evento.tarefa] || evento.tarefa) + ' registrado');
+      eventosHojeLocal.push({
+        tarefa: evento.tarefa, local: evento.local,
+        quantidade: evento.quantidade, horario: dados.horario_execucao
+      });
+      renderEventosHoje();
+    } else {
+      mostrarToast('Erro: ' + (result.mensagem || 'tente novamente'));
+    }
+  } catch (err) {
+    mostrarToast('Erro de conexão');
+  }
+}
+
+function renderEventosHoje() {
+  const el = document.getElementById('eventos-hoje-lista');
+  if (!el) return;
+  if (eventosHojeLocal.length === 0) {
+    el.textContent = 'Nenhum evento ainda hoje';
+    return;
+  }
+  el.innerHTML = eventosHojeLocal.slice().reverse().map(ev => {
+    let desc = LABELS_TAREFA[ev.tarefa] || ev.tarefa;
+    if (ev.local) desc += ' · ' + ev.local;
+    if (ev.quantidade) desc += ' · ' + ev.quantidade + 'x';
+    return '<div style="padding:6px 0;border-bottom:1px solid var(--border)">' +
+      ev.horario.slice(0, 5) + ' — ' + desc + '</div>';
+  }).join('');
+}
+
+function mostrarToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.className = 'toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimeout);
+  window._toastTimeout = setTimeout(() => t.classList.remove('show'), 2200);
+}
   
 
 
@@ -4818,24 +4913,10 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5oB_e1sZtdo7i43DZ
     };
 
     if (type === 'tarefas') return { ...base,
-      horario_execucao: v('tarefas_horario_execucao'),
-      fez_faxina: v('fez_faxina'), tipo_faxina: chip('tipo_faxina'),
-      tirou_poeira: v('tirou_poeira'), locais_poeira: multiChip('locais_poeira'),
-      varreu_sala: v('varreu_sala'), varreu_cozinha: v('varreu_cozinha'),
-      varreu_banheiro: v('varreu_banheiro'), qtd_banheiros_varridos: chip('qtd_banheiros_varridos'),
-      varreu_quarto: v('varreu_quarto'), qtd_quartos_varridos: chip('qtd_quartos_varridos'),
-      varreu_area: v('varreu_area'),
-      passou_pano: v('pano_sala') || v('pano_cozinha') || v('pano_banheiro') || v('pano_quarto') || v('pano_area') || false,
-      pano_sala: v('pano_sala'), pano_cozinha: v('pano_cozinha'),
-      pano_banheiro: v('pano_banheiro'), pano_quarto: v('pano_quarto'),
-      pano_quarto_ambos: chip('pano_quarto_ambos'), pano_area: v('pano_area'),
-      lavou_roupa: v('lavou_roupa'), estendeu_roupa: v('estendeu_roupa'),
-      tirou_do_varal: v('tirou_do_varal'), guardou_roupa: v('guardou_roupa'),
-      fez_cafe_manha: v('fez_cafe_manha'), fez_almoco: v('fez_almoco'),
-      fez_lanche: v('fez_lanche'), fez_jantar: v('fez_jantar'), fez_pao: v('fez_pao'),
-      outras_tarefas: v('outras_tarefas'), satisfacao_tarefas: v('satisfacao_tarefas'),
+      satisfacao_tarefas: v('satisfacao_tarefas'),
+      outras_tarefas: v('outras_tarefas'),
     };
-
+    
     if (type === 'intimidade') return { ...base,
       houve_intimidade: v('houve_intimidade'), houve_masturbacao: v('houve_masturbacao'),
       tipo_parceiro: chip('tipo_parceiro'), genero_parceiro: chip('genero_parceiro'),
