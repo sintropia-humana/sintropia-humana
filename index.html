@@ -3499,35 +3499,8 @@
     <div style="margin-top:12px;font-size:11px;opacity:0.55;text-align:center" id="fin-status">Dados da planilha compartilhada</div>
   </div>
 
-  <!-- Formulário de sentimento (mantido para registro_financeiro no BigQuery) -->
+<!-- Formulário de sentimento (mantido para registro_financeiro no BigQuery) -->
   <div class="card">
-    <div class="field">
-      <label>Categoria da entrada</label>
-      <div class="chips">
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'salario')">Salário</span>
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'freelance')">Freelance</span>
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'consultoria')">Consultoria</span>
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'investimento')">Investimento</span>
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'bonus')">Bônus</span>
-        <span class="chip" onclick="selectChip(this,'cat_entrada',0,'outro')">Outro</span>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="field">
-      <label>Categoria da saída</label>
-      <div class="chips">
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'moradia')">Moradia</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'alimentacao')">Alimentação</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'saude')">Saúde</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'transporte')">Transporte</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'educacao')">Educação</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'lazer')">Lazer</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'vestuario')">Vestuário</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'assinatura')">Assinatura</span>
-        <span class="chip" onclick="selectChip(this,'cat_saida',0,'outro')">Outro</span>
-      </div>
-    </div>
-    <div class="divider"></div>
     <div class="toggle-row">
       <label style="margin:0">Teve gasto supérfluo?</label>
       <label class="toggle"><input type="checkbox" id="gastou_suprafluo" onchange="toggleSuprafluo(this)"><span class="toggle-slider"></span></label>
@@ -4831,8 +4804,6 @@ function mostrarToast(msg) {
 
     // registro_financeiro: SEM horario_execucao. categoria_entrada/categoria_saida (não cat_*!)
     if (type === 'financeiro') return { ...base,
-      entrada: v('entrada_fin'), categoria_entrada: chip('cat_entrada'),
-      saida: v('saida_fin'), categoria_saida: chip('cat_saida'),
       gastou_suprafluo: v('gastou_suprafluo'), descricao_suprafluo: v('descricao_suprafluo'),
       satisfacao_financeira: v('satisfacao_financeira'),
       ansiedade_financeira: v('ansiedade_financeira'),
