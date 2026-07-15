@@ -2136,169 +2136,98 @@
   
 
 <!-- IDIOMAS -->
-
 <div class="screen" id="screen-idiomas">
-
   <p class="section-title">Idiomas</p>
 
-  
-
   <div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Estudou idiomas hoje?</label>
+      <label class="toggle"><input type="checkbox" id="estudou_hoje_idiomas" onchange="toggleEstudouIdiomas(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
 
-    <div class="field">
+  <div id="idiomas-campos" style="display:none">
 
-      <label>Idioma praticado</label>
-
-      <div class="chips">
-
-        <span class="chip selected" onclick="selectChip(this,'idioma',0,'ingles')">Inglês</span>
-
-        <span class="chip" onclick="selectChip(this,'idioma',0,'frances')">Francês</span>
-
-        <span class="chip" onclick="selectChip(this,'idioma',0,'espanhol')">Espanhol</span>
-
+    <div class="card">
+      <div class="field">
+        <label>Idioma praticado</label>
+        <div class="chips">
+          <span class="chip selected" onclick="selectChip(this,'idioma',0,'ingles')">Inglês</span>
+          <span class="chip" onclick="selectChip(this,'idioma',0,'frances')">Francês</span>
+          <span class="chip" onclick="selectChip(this,'idioma',0,'espanhol')">Espanhol</span>
+        </div>
       </div>
-
+      <div class="divider"></div>
+      <div class="field">
+        <label>Pilar</label>
+        <div class="chips">
+          <span class="chip" onclick="toggleChipMulti(this,'pilar_multi','listening')">Listening</span>
+          <span class="chip" onclick="toggleChipMulti(this,'pilar_multi','speaking')">Speaking</span>
+          <span class="chip" onclick="toggleChipMulti(this,'pilar_multi','writing')">Writing</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Fase atual</label>
+        <div class="chips">
+          <span class="chip selected" onclick="selectChip(this,'fase',0,'basico')">Básico</span>
+          <span class="chip" onclick="selectChip(this,'fase',0,'intermediario')">Intermediário</span>
+          <span class="chip" onclick="selectChip(this,'fase',0,'avancado')">Avançado</span>
+        </div>
+      </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Pilar</label>
-
-      <div class="chips">
-
-        <span class="chip" onclick="selectChip(this,'pilar',0,'listening')">Listening</span>
-
-        <span class="chip" onclick="selectChip(this,'pilar',0,'speaking')">Speaking</span>
-
-        <span class="chip" onclick="selectChip(this,'pilar',0,'writing')">Writing</span>
-
+    <div class="card">
+      <div class="field">
+        <label>Atividade praticada</label>
+        <div class="chips">
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','shadowing')">Shadowing</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','podcast')">Podcast</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','serie')">Série</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','diario')">Diário</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','redacao')">Redação</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','conversacao')">Conversação</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','leitura')">Leitura</span>
+          <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','musica')">Música</span>
+        </div>
       </div>
-
+      <div class="divider"></div>
+      <div class="field">
+        <label>Horário da prática</label>
+        <input type="time" id="horario_idioma">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Minutos de prática</label>
+        <input type="number" min="1" placeholder="30" id="minutos_pratica">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Palavras novas <span class="label-hint">opcional</span></label>
+        <input type="number" min="0" placeholder="5" id="vocabulario_novo">
+      </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Fase atual</label>
-
-      <div class="chips">
-
-        <span class="chip selected" onclick="selectChip(this,'fase',0,'basico')">Básico</span>
-
-        <span class="chip" onclick="selectChip(this,'fase',0,'intermediario')">Intermediário</span>
-
-        <span class="chip" onclick="selectChip(this,'fase',0,'avancado')">Avançado</span>
-
+    <div class="card">
+      <div class="field">
+        <label>Evolução percebida <span class="scale-value" id="val-nivel_percebido">5</span></label>
+        <div class="scale-container">
+          <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_percebido')" id="nivel_percebido">
+          <div class="scale-labels"><span>Improdutivo</span><span>Salto de nível</span></div>
+          <span class="scale-meaning" id="meaning-nivel_percebido">5 — Evolução moderada</span>
+        </div>
       </div>
-
+      <div class="divider"></div>
+      <div class="field">
+        <label>Principal dificuldade <span class="label-hint">opcional</span></label>
+        <textarea placeholder="O que travou hoje na prática?" id="dificuldade_idioma"></textarea>
+      </div>
     </div>
 
   </div>
-
-  
-
-  <div class="card">
-
-    <div class="field">
-
-      <label>Atividade praticada</label>
-
-      <div class="chips">
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','shadowing')">Shadowing</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','podcast')">Podcast</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','serie')">Série</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','diario')">Diário</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','redacao')">Redação</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','conversacao')">Conversação</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','leitura')">Leitura</span>
-
-        <span class="chip" onclick="toggleChipMulti(this,'atividade_idioma','musica')">Música</span>
-
-      </div>
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Horário da prática</label>
-
-      <input type="time" id="horario_idioma">
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Minutos de prática</label>
-
-      <input type="number" min="1" placeholder="30" id="minutos_pratica">
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Palavras novas <span class="label-hint">opcional</span></label>
-
-      <input type="number" min="0" placeholder="5" id="vocabulario_novo">
-
-    </div>
-
-  </div>
-
-  
-
-  <div class="card">
-
-    <div class="field">
-
-      <label>Evolução percebida <span class="scale-value" id="val-nivel_percebido">5</span></label>
-
-      <div class="scale-container">
-
-        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'nivel_percebido')" id="nivel_percebido">
-
-        <div class="scale-labels"><span>Improdutivo</span><span>Salto de nível</span></div>
-
-        <span class="scale-meaning" id="meaning-nivel_percebido">5 — Evolução moderada</span>
-
-      </div>
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field">
-
-      <label>Principal dificuldade <span class="label-hint">opcional</span></label>
-
-      <textarea placeholder="O que travou hoje na prática?" id="dificuldade_idioma"></textarea>
-
-    </div>
-
-  </div>
-
-  
 
   <button class="submit-btn" onclick="submitForm('idiomas')">Salvar prática de idiomas</button>
-
 </div>
-
   
 
 <!-- CONSULTORIA -->
@@ -4813,7 +4742,7 @@ function mostrarToast(msg) {
     // horario_execucao (TEM, confirmado)
     if (type === 'idiomas') return { ...base,
       horario_execucao: v('horario_idioma'), idioma: chip('idioma') || 'ingles',
-      pilar: chip('pilar') || 'listening', fase: chip('fase') || 'basico', atividade: multiChip('atividade_idioma'),
+      pilar: multiChip('pilar_multi'), fase: chip('fase') || 'basico', atividade: multiChip('atividade_idioma'),
       minutos_pratica: (v('minutos_pratica') !== null ? v('minutos_pratica') : 0), vocabulario_novo: v('vocabulario_novo'),
       nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
     };
@@ -5277,6 +5206,17 @@ function mostrarToast(msg) {
     document.getElementById('tab-campos').style.display = cb.checked ? 'block' : 'none';
 
   }
+  function toggleTab(cb) {
+  document.getElementById('tab-campos').style.display = cb.checked ? 'block' : 'none';
+}
+
+function toggleEstudouIdiomas(cb) {
+  document.getElementById('idiomas-campos').style.display = cb.checked ? 'block' : 'none';
+}
+
+function toggleBesteira(cb) {
+  document.getElementById('besteira-campos').style.display = cb.checked ? 'block' : 'none';
+}
 
   function toggleBesteira(cb) {
 
