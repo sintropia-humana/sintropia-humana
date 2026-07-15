@@ -4755,7 +4755,8 @@ function mostrarToast(msg) {
     if (type === 'tabagismo') return { ...base,
       fumou_hoje: v('fumou_hoje'), tipo_cigarro: chip('tipo_cigarro'),
       quantidade_cigarros: v('quantidade_cigarros'), horario_primeiro: v('horario_primeiro'),
-      gatilho: chip('gatilho'), nivel_vontade: v('nivel_vontade'),
+      gatilho: chip('gatilho'), momento_vontade: chip('momento_vontade') || 'agora',
+      nivel_vontade: v('nivel_vontade'),
       nivel_resistencia: v('nivel_resistencia'), comparado_ontem: chip('comparado_ontem'),
     };
 
