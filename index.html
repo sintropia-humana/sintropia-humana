@@ -4740,12 +4740,17 @@ function mostrarToast(msg) {
     // registro_idiomas: idioma, fase, pilar, minutos_pratica, atividade (não atividade_idioma!),
     // nivel_percebido, consistencia_streak, vocabulario_novo, dificuldade, observacoes,
     // horario_execucao (TEM, confirmado)
-    if (type === 'idiomas') return { ...base,
-      horario_execucao: v('horario_idioma'), idioma: chip('idioma') || 'ingles',
-      pilar: multiChip('pilar_multi'), fase: chip('fase') || 'basico', atividade: multiChip('atividade_idioma'),
-      minutos_pratica: (v('minutos_pratica') !== null ? v('minutos_pratica') : 0), vocabulario_novo: v('vocabulario_novo'),
-      nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
-    };
+    if (type === 'idiomas') {
+  const estudou = document.getElementById('estudou_hoje_idiomas').checked;
+  if (!estudou) return { ...base, estudou_hoje: false };
+  return { ...base,
+    estudou_hoje: true,
+    horario_execucao: v('horario_idioma'), idioma: chip('idioma') || 'ingles',
+    pilar: multiChip('pilar_multi'), fase: chip('fase') || 'basico', atividade: multiChip('atividade_idioma'),
+    minutos_pratica: (v('minutos_pratica') !== null ? v('minutos_pratica') : 0), vocabulario_novo: v('vocabulario_novo'),
+    nivel_percebido: v('nivel_percebido'), dificuldade: v('dificuldade_idioma'),
+  };
+}
 
     if (type === 'consultoria') {
       const chips = document.querySelectorAll('#competencias-chips .chip.selected');
