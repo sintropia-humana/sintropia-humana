@@ -1553,26 +1553,37 @@
 
   
 
-  <div class="card">
-
-    <div class="field">
-
-      <label>Horas de sono <span class="label-hint">noite anterior</span></label>
-
-      <input type="number" min="0" max="24" step="0.5" placeholder="7.5" id="horas_sono">
-
+<div class="card">
+    <div class="toggle-row">
+      <label style="margin:0">Dormiu em casa?</label>
+      <label class="toggle"><input type="checkbox" id="dormiu_em_casa" checked><span class="toggle-slider"></span></label>
     </div>
-
     <div class="divider"></div>
-
     <div class="field">
-
-      <label>Horário que acordou</label>
-
-      <input type="time" id="horario_acordou">
-
+      <label>Horas de sono <span class="label-hint">noite anterior</span></label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" min="0" max="24" placeholder="7" id="sono_horas" style="flex:1">
+        <span style="color:var(--text-secondary);font-size:13px;white-space:nowrap">h</span>
+        <input type="number" min="0" max="59" placeholder="30" id="sono_minutos" style="flex:1">
+        <span style="color:var(--text-secondary);font-size:13px;white-space:nowrap">min</span>
+      </div>
     </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Horário que acordou</label>
+      <input type="time" id="horario_acordou">
+    </div>
+  </div>
 
+  <div class="card">
+    <div class="field">
+      <label>Qualidade do sono <span class="scale-value" id="val-qualidade_sono">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'qualidade_sono')" id="qualidade_sono">
+        <div class="scale-labels"><span>Péssimo</span><span>Excelente</span></div>
+        <span class="scale-meaning" id="meaning-qualidade_sono">5 — Sono neutro</span>
+      </div>
+    </div>
   </div>
 
   
@@ -4407,6 +4418,8 @@ function mostrarToast(msg) {
 
     bem_estar_geral: ['Péssimo — sem condições','Muito ruim','Ruim','Abaixo do normal','Razoável','Neutro — ok','Boa saúde','Muito bem','Excelente','Saúde ótima','Saúde perfeita — pleno vigor'],
 
+    qualidade_sono: ['Péssimo — não dormiu de verdade','Muito ruim','Ruim','Abaixo do normal','Sono raso','Sono neutro','Sono bom','Sono muito bom','Sono profundo e reparador','Excelente','Sono perfeito — acordou renovado'],
+    
     impacto_emocional_mus: ['Nenhum impacto','Impacto mínimo','Muito leve','Leve influência','Impacto moderado leve','Impacto moderado','Música transformou o momento','Alto impacto','Impacto profundo — emocionou','Muito profundo','Experiência transcendente'],
 
     qualidade_conexoes_rel: ['Isolamento total','Interações mínimas e vazias','Contato superficial leve','Contato superficial','Interações neutras leves','Interações neutras','Conexões genuínas','Conexões profundas','Muito profundas','Excepcionais','Dia de relações excepcionais — amor e presença total'],
@@ -4669,10 +4682,20 @@ function mostrarToast(msg) {
 
   
 
-  function coletarDados(type) {
-    const now = new Date();
-    const date = now.toISOString().slice(0,10);
+  function calcularSono() {
+    const h = document.getElementById('sono_horas');
+    const m = document.getElementById('sono_minutos');
+    const horas = h && h.value !== '' ? parseInt(h.value) : null;
+    const minutos = m && m.value !== '' ? parseInt(m.value) : null;
+    if (horas === null && minutos === null) return { horas_sono: null, minutos_sono: null };
+    const hh = horas || 0;
+    const mm = minutos || 0;
+    const totalMinutos = hh * 60 + mm;
+    const horasDecimal = Math.round((totalMinutos / 60) * 100) / 100;
+    return { horas_sono: horasDecimal, minutos_sono: totalMinutos };
+  }
 
+  function coletarDados(type) {
     function v(id) {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -4686,16 +4709,20 @@ function mostrarToast(msg) {
 
     const base = { data_registro: date };
 
-    if (type === 'diario') return { ...base,
-      horas_sono: v('horas_sono'), energia: v('energia'), humor: v('humor'),
-      clareza_mental: v('clareza_mental'), ansiedade: v('ansiedade'),
-      proposito: v('proposito'), presenca_familia: v('presenca_familia'),
-      satisfacao_trabalho: v('satisfacao_trabalho'), exercicio: v('exercicio'),
-      fumou_hoje: v('fumou_hoje'), qualidade_alimentacao: v('qualidade_alimentacao'),
-      copos_agua: v('copos_agua'), consumiu_alcool: v('consumiu_alcool'),
-      ouviu_musica: v('ouviu_musica'), houve_conflito: v('houve_conflito'),
-    };
-
+    if (type === 'diario') {
+      const sono = calcularSono();
+      return { ...base,
+        horas_sono: sono.horas_sono, minutos_sono: sono.minutos_sono,
+        dormiu_em_casa: v('dormiu_em_casa'), qualidade_sono: v('qualidade_sono'),
+        energia: v('energia'), humor: v('humor'),
+        clareza_mental: v('clareza_mental'), ansiedade: v('ansiedade'),
+        proposito: v('proposito'), presenca_familia: v('presenca_familia'),
+        satisfacao_trabalho: v('satisfacao_trabalho'), exercicio: v('exercicio'),
+        fumou_hoje: v('fumou_hoje'), qualidade_alimentacao: v('qualidade_alimentacao'),
+        copos_agua: v('copos_agua'), consumiu_alcool: v('consumiu_alcool'),
+        ouviu_musica: v('ouviu_musica'), houve_conflito: v('houve_conflito'),
+      };
+    }
     // visualizacao_proposito: horario_execucao, pratica_realizada, duracao_minutos,
     // etapas_concluidas, conexao_proposito, nivel_gratidao, clareza_visao,
     // energia_pos_pratica, emocao_dominante, afirmacao_mais_forte, visao_mais_viva, observacoes
