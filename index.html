@@ -1586,6 +1586,26 @@
     </div>
   </div>
 
+  <div class="card">
+    <div class="field">
+      <label>Energia à noite <span class="scale-value" id="val-energia_noite">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'energia_noite')" id="energia_noite">
+        <div class="scale-labels"><span>Sem energia</span><span>Cheio de energia</span></div>
+        <span class="scale-meaning" id="meaning-energia_noite">5 — Energia neutra à noite</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <label>Energia ao dormir <span class="scale-value" id="val-energia_ao_dormir">5</span></label>
+      <div class="scale-container">
+        <input type="range" min="0" max="10" value="5" oninput="updateScale(this,'energia_ao_dormir')" id="energia_ao_dormir">
+        <div class="scale-labels"><span>Exausto</span><span>Estado de fluxo</span></div>
+        <span class="scale-meaning" id="meaning-energia_ao_dormir">5 — Energia neutra ao deitar</span>
+      </div>
+    </div>
+  </div>
+
   
 
   <div class="card">
@@ -4419,6 +4439,10 @@ function mostrarToast(msg) {
     bem_estar_geral: ['Péssimo — sem condições','Muito ruim','Ruim','Abaixo do normal','Razoável','Neutro — ok','Boa saúde','Muito bem','Excelente','Saúde ótima','Saúde perfeita — pleno vigor'],
 
     qualidade_sono: ['Péssimo — não dormiu de verdade','Muito ruim','Ruim','Abaixo do normal','Sono raso','Sono neutro','Sono bom','Sono muito bom','Sono profundo e reparador','Excelente','Sono perfeito — acordou renovado'],
+
+    energia_noite: ['Completamente sem energia — exausto','Energia mínima','Energia muito baixa','Energia abaixo do normal','Cansaço perceptível','Energia neutra à noite','Energia boa para a noite','Energia alta à noite','Muita energia — dificuldade de relaxar','Energia muito alta','Cheio de energia — sem sinais de cansaço'],
+
+    energia_ao_dormir: ['Completamente exausto — apagou na hora','Quase sem energia ao deitar','Energia muito baixa ao dormir','Energia baixa ao dormir','Levemente cansado ao dormir','Energia neutra ao deitar','Ainda com alguma energia ao dormir','Energia boa mesmo na hora de dormir','Dificuldade de desligar — muita energia','Quase em estado de alerta ao deitar','Estado de fluxo — extremamente desperto ao deitar'],
     
     impacto_emocional_mus: ['Nenhum impacto','Impacto mínimo','Muito leve','Leve influência','Impacto moderado leve','Impacto moderado','Música transformou o momento','Alto impacto','Impacto profundo — emocionou','Muito profundo','Experiência transcendente'],
 
@@ -4711,12 +4735,13 @@ function mostrarToast(msg) {
 
     const base = { data_registro: date };
 
-    if (type === 'diario') {
-      const sono = calcularSono();
-      return { ...base,
-        horas_sono: sono.horas_sono, minutos_sono: sono.minutos_sono,
-        dormiu_em_casa: v('dormiu_em_casa'), qualidade_sono: v('qualidade_sono'),
-        energia: v('energia'), humor: v('humor'),
+if (type === 'diario') {
+    const sono = calcularSono();
+    return { ...base,
+      horas_sono: sono.horas_sono, minutos_sono: sono.minutos_sono,
+      dormiu_em_casa: v('dormiu_em_casa'), qualidade_sono: v('qualidade_sono'),
+      energia_noite: v('energia_noite'), energia_ao_dormir: v('energia_ao_dormir'),
+      energia: v('energia'), humor: v('humor'),
         clareza_mental: v('clareza_mental'), ansiedade: v('ansiedade'),
         proposito: v('proposito'), presenca_familia: v('presenca_familia'),
         satisfacao_trabalho: v('satisfacao_trabalho'), exercicio: v('exercicio'),
